@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_05_005737) do
+ActiveRecord::Schema.define(version: 2021_09_05_125129) do
 
   create_table "cut_offs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
-    t.integer "type"
+    t.integer "paymentmodeid"
     t.date "startdate"
     t.date "enddate"
     t.boolean "active"
@@ -58,6 +58,14 @@ ActiveRecord::Schema.define(version: 2021_09_05_005737) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "leave_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.boolean "ispaid"
+    t.boolean "active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "leaves", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "employeeid"
     t.date "datefiled"
@@ -73,6 +81,7 @@ ActiveRecord::Schema.define(version: 2021_09_05_005737) do
     t.boolean "active"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "useincutoffs", default: -> { "(true)" }
   end
 
 end

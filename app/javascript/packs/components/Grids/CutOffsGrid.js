@@ -46,13 +46,13 @@ export default function CutOffsGrid() {
 
   const onEditorPreparing = (e) => {
     if (e.parentType == "dataRow") {
-      if (e.dataField == "paymentmodetype") {
+      if (e.dataField == "paymentmodeid") {
         e.editorOptions.dataSource = new DataSource({
           store: pModes,
           key: "id",
         });
         e.editorOptions.onValueChanged = ({ value }) => {
-          e.row.data.paymentmodetype = value;
+          e.row.data.paymentmodeid = value;
         };
 
         if (e.row.isNewRow) {
@@ -97,7 +97,6 @@ export default function CutOffsGrid() {
           allowAdding={true}
           allowDeleting={true}
           mode="form"
-          show
         />
         <Paging pageSize={10} />
         <Column
@@ -111,7 +110,7 @@ export default function CutOffsGrid() {
         <Column dataField="name" caption="Name" dataType="string">
           <RequiredRule />
         </Column>
-        <Column dataField="paymentmodetype" caption="Type">
+        <Column dataField="paymentmodeid" caption="Type">
           <Lookup valueExpr="id" displayExpr="name" dataSource={LUdataSource} />
         </Column>
         <Column

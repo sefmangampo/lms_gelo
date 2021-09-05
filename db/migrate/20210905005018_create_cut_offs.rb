@@ -2,7 +2,7 @@ class CreateCutOffs < ActiveRecord::Migration[6.1]
   def change
     create_table :cut_offs do |t|
       t.string :name
-      t.integer :type
+      t.integer :paymentmodeid
       t.date :startdate
       t.date :enddate
       t.boolean :active

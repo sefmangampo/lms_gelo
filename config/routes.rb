@@ -27,6 +27,18 @@ Rails.application.routes.draw do
         delete 'leave_status/:id', to: 'leave_status#destroy'
         patch 'leave_status/:id', to: 'leave_status#update'
 
+        get 'leave_types', to: 'leave_types#index'
+        get 'leave_types/:id', to: 'leave_types#show'
+        post 'leave_types', to: 'leave_types#create'
+        delete 'leave_types/:id', to: 'leave_types#destroy'
+        patch 'leave_types/:id', to: 'leave_types#update'
+
+        get 'leaves', to: 'leaves#index'
+        get 'leaves/:id', to: 'leaves#show'
+        post 'leaves', to: 'leaves#create'
+        delete 'leaves/:id', to: 'leaves#destroy'
+        patch 'leaves/:id', to: 'leaves#update'
+
     end
   end
 

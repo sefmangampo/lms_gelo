@@ -19,9 +19,13 @@ const items = [
     id: "4",
     text: "Leave Status",
   },
+  {
+    id: "5",
+    text: "Leave Types",
+  },
 ];
 
-export default function LeftTreeMenu({ setSelectedItem }) {
+export default function MaintanceMenu({ setSelectedItem }) {
   const onItemClick = ({ itemIndex }) => {
     setSelectedItem(itemIndex);
   };
