@@ -6,9 +6,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-import "devextreme/dist/css/dx.material.orange.dark.compact.css";
+import "devextreme/dist/css/dx.material.teal.dark.compact.css";
 
-const Hello = (props) => <div>Hello {props.name}!</div>;
+import Home from "./components/Home";
+
+const Hello = (props) => (
+  <div>
+    <Home />
+  </div>
+);
 
 Hello.defaultProps = {
   name: "Gelo",

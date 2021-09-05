@@ -1,0 +1,2 @@
+class LeaveStatus < ApplicationRecord
+end

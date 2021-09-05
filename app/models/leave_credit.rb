@@ -1,0 +1,2 @@
+class LeaveCredit < ApplicationRecord
+end

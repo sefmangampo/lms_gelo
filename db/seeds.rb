@@ -5,3 +5,35 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+PaymentMode.create([
+    {
+        name: 'Weekly',
+        active: true,
+        useincutoffs: true
+    },{
+        name: 'Semi-monthly',
+        active: true,
+        useincutoffs: true
+    },
+    {
+        name: 'blank',
+        active: true,
+        useincutoffs: false
+    }
+])
+
+# LeaveStatus.create([
+#     {
+#         name: 'Pending',
+#         active: true
+#     },
+#     {
+#         name: 'Approved',
+#         active: true
+#     },
+#     {
+#         name: 'Disapproved',
+#         active: true
+#     }
+# ])

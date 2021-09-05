@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2em;
+}
+
+.sidebar {
+    flex: 1;
+    padding: 1em;
+}
+
+.contentbar {
+    flex: 3;
+    padding: 1em;
+}
