@@ -1,0 +1,2 @@
+class Undertime < ApplicationRecord
+end

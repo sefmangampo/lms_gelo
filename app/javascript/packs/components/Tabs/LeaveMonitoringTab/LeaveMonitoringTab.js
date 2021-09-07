@@ -2,7 +2,13 @@ import React, { useState } from "react";
 
 import { MonitoringMenu } from "../../SideMenu";
 
-import { EmployeeLeavesGrid } from "../../Grids";
+import {
+  EmployeeLeavesGrid,
+  LeaveCreditsGrid,
+  LeaveAccrualSettingsGrid,
+  LeaveAccrualsGrid,
+  LeaveAccrualQueueGrid,
+} from "../../Grids";
 
 import css from "./LeaveMonitoring.module.scss";
 
@@ -15,6 +21,11 @@ export default function LeaveMonitoringTab() {
       </div>
       <div className={css.contentbar}>
         {selectedItem === 0 && <EmployeeLeavesGrid />}
+        {selectedItem === 1 && <LeaveCreditsGrid />}
+
+        {selectedItem === 3 && <LeaveAccrualsGrid />}
+        {selectedItem === 4 && <LeaveAccrualQueueGrid />}
+        {selectedItem === 5 && <LeaveAccrualSettingsGrid />}
       </div>
     </div>
   );

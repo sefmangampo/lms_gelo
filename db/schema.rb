@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_05_125129) do
+ActiveRecord::Schema.define(version: 2021_09_06_121255) do
+
+  create_table "accrual_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "campaigns", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "cut_offs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
@@ -43,12 +57,46 @@ ActiveRecord::Schema.define(version: 2021_09_05_125129) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "leave_accrual_queues", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "employeeid"
+    t.date "dateeffective"
+    t.float "valuetoadd"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "leavetypeid"
+  end
+
+  create_table "leave_accrual_settings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "employeeid"
+    t.boolean "isregular"
+    t.float "rate"
+    t.integer "year"
+    t.boolean "isyearly"
+    t.boolean "active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "leavetypeid"
+  end
+
+  create_table "leave_accruals", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "employeeid"
+    t.date "dategiven"
+    t.float "valueadded"
+    t.string "remarks"
+    t.boolean "issystemgenerated"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "leavetypeid"
+    t.integer :leaveaccrualtypeid
+  end
+
   create_table "leave_credits", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "employeeid"
     t.integer "year"
     t.float "credits"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "leavetypeid"
   end
 
   create_table "leave_statuses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -60,10 +108,10 @@ ActiveRecord::Schema.define(version: 2021_09_05_125129) do
 
   create_table "leave_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
-    t.boolean "ispaid"
     t.boolean "active"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "ispaid"
   end
 
   create_table "leaves", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -74,6 +122,9 @@ ActiveRecord::Schema.define(version: 2021_09_05_125129) do
     t.integer "year"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "leavetypeid"
+    t.integer "cutoffid"
+    t.float "quantity"
   end
 
   create_table "payment_modes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -82,6 +133,23 @@ ActiveRecord::Schema.define(version: 2021_09_05_125129) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "useincutoffs", default: -> { "(true)" }
+  end
+
+  create_table "positions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.boolean "active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "undertimes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "employeeid"
+    t.date "from"
+    t.date "to"
+    t.float "hours"
+    t.integer "cutoffid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
 end

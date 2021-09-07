@@ -39,6 +39,54 @@ Rails.application.routes.draw do
         delete 'leaves/:id', to: 'leaves#destroy'
         patch 'leaves/:id', to: 'leaves#update'
 
+        get 'leave_credits', to: 'leave_credits#index'
+        get 'leave_credits/:id', to: 'leave_credits#show'
+        post 'leave_credits', to: 'leave_credits#create'
+        delete 'leave_credits/:id', to: 'leave_credits#destroy'
+        patch 'leave_credits/:id', to: 'leave_credits#update'
+
+        get 'leave_accruals', to: 'leave_accruals#index'
+        get 'leave_accruals/:id', to: 'leave_accruals#show'
+        post 'leave_accruals', to: 'leave_accruals#create'
+        delete 'leave_accruals/:id', to: 'leave_accruals#destroy'
+        patch 'leave_accruals/:id', to: 'leave_accruals#update'
+
+        get 'leave_accrual_settings', to: 'leave_accrual_settings#index'
+        get 'leave_accrual_settings/:id', to: 'leave_accrual_settings#show'
+        post 'leave_accrual_settings', to: 'leave_accrual_settings#create'
+        delete 'leave_accrual_settings/:id', to: 'leave_accrual_settings#destroy'
+        patch 'leave_accrual_settings/:id', to: 'leave_accrual_settings#update'
+
+        get 'leave_accrual_queue', to: 'leave_accrual_queue#index'
+        get 'leave_accrual_queue/:id', to: 'leave_accrual_queue#show'
+        post 'leave_accrual_queue', to: 'leave_accrual_queue#create'
+        delete 'leave_accrual_queue/:id', to: 'leave_accrual_queue#destroy'
+        patch 'leave_accrual_queue/:id', to: 'leave_accrual_queue#update'
+
+        get 'position', to: 'position#index'
+        get 'position/:id', to: 'position#show'
+        post 'position', to: 'position#create'
+        delete 'position/:id', to: 'position#destroy'
+        patch 'position/:id', to: 'position#update'
+
+        get 'undertime', to: 'undertime#index'
+        get 'undertime/:id', to: 'undertime#show'
+        post 'undertime', to: 'undertime#create'
+        delete 'undertime/:id', to: 'undertime#destroy'
+        patch 'undertime/:id', to: 'undertime#update'
+
+        get 'campaign', to: 'campaign#index'
+        get 'campaign/:id', to: 'campaign#show'
+        post 'campaign', to: 'campaign#create'
+        delete 'campaign/:id', to: 'campaign#destroy'
+        patch 'campaign/:id', to: 'campaign#update'
+
+        get 'leave_accrual_types', to: 'leave_accrual_types#index'
+        get 'leave_accrual_types/:id', to: 'leave_accrual_types#show'
+        post 'leave_accrual_types', to: 'leave_accrual_types#create'
+        delete 'leave_accrual_types/:id', to: 'leave_accrual_types#destroy'
+        patch 'leave_accrual_types/:id', to: 'leave_accrual_types#update'
+
     end
   end
 

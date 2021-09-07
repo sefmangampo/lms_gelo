@@ -6,6 +6,9 @@ import {
   CutOffsGrid,
   LeaveStatusGrid,
   LeaveTypesGrid,
+  AccrualTypesGrid,
+  PositionsGrid,
+  CampaignGrid,
 } from "../../Grids";
 import { MaintanceMenu } from "../../SideMenu";
 
@@ -25,6 +28,9 @@ export default function MaintenanceTab() {
         {selectedItem === 2 && <PaymentModeGrid />}
         {selectedItem === 3 && <LeaveStatusGrid />}
         {selectedItem === 4 && <LeaveTypesGrid />}
+        {selectedItem === 5 && <AccrualTypesGrid />}
+        {selectedItem === 6 && <CampaignGrid />}
+        {selectedItem === 7 && <PositionsGrid />}
       </div>
     </div>
   );

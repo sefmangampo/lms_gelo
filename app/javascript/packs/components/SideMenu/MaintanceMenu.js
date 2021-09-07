@@ -23,6 +23,18 @@ const items = [
     id: "5",
     text: "Leave Types",
   },
+  {
+    id: "6",
+    text: "Accrual Types",
+  },
+  {
+    id: "7",
+    text: "Campaigns",
+  },
+  {
+    id: "8",
+    text: "Positions",
+  },
 ];
 
 export default function MaintanceMenu({ setSelectedItem }) {

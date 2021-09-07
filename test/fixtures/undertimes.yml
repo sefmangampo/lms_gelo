@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  employeeid: 1
+  from: 2021-09-06
+  to: 2021-09-06
+  hours: 1.5
+  cutoffid: 1
+
+two:
+  employeeid: 1
+  from: 2021-09-06
+  to: 2021-09-06
+  hours: 1.5
+  cutoffid: 1

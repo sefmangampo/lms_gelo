@@ -2,7 +2,7 @@ class Api::V1::LeavesController < ApiController
   def index
 
     @leaves = Leafe.all
- 
+
     render json: @leaves
 
   end
@@ -47,6 +47,6 @@ class Api::V1::LeavesController < ApiController
   end
 
   def leave_params
-    params.permit(:id, :employeeid, :datefiled ,:dateeffective, :status, :year, :leavetypeid)
+    params.permit(:id, :employeeid, :datefiled ,:dateeffective, :status, :year, :leavetypeid, :leafe, :quantity, :cutoffid)
   end
 end

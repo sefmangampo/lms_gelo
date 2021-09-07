@@ -1,0 +1,2 @@
+class VwLeaveCredit < ApplicationRecord
+end

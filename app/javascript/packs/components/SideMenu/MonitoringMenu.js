@@ -4,16 +4,32 @@ import TreeView from "devextreme-react/tree-view";
 const items = [
   {
     id: "1",
-    text: "Employee Leaves",
+    text: "Leaves",
     selected: true,
   },
   {
     id: "2",
-    text: "Employee Leave Credits",
+    text: "Leave Credits",
   },
   {
     id: "3",
-    text: "Employee Undertime",
+    text: " Undertime",
+  },
+  {
+    id: "4",
+    text: "Accruals",
+  },
+  {
+    id: "5",
+    text: "Accrual Adjustments",
+  },
+  {
+    id: "6",
+    text: "Accrual Queue",
+  },
+  {
+    id: "7",
+    text: "Accrual Settings",
   },
 ];
 

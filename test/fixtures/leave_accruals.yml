@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  employeeid: 1
+  dategiven: 2021-09-06
+  valueadded: 1.5
+  remarks: MyString
+  issystemgenerated: false
+
+two:
+  employeeid: 1
+  dategiven: 2021-09-06
+  valueadded: 1.5
+  remarks: MyString
+  issystemgenerated: false

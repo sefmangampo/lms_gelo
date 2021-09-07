@@ -1,0 +1,2 @@
+class LeaveAccrualSetting < ApplicationRecord
+end

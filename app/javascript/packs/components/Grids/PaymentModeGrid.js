@@ -4,38 +4,38 @@ import DataGrid, { Column, Editing, Export } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
 import { getPaymentModes } from "../../data/";
-
-import { exportToPDF, exportButton } from "./Helpers/ExportToPDF";
+import { onToolbarPreparing } from "./Helpers";
 
 const dataSource = new DataSource({
   key: "id",
-  store: getPaymentModes(),
+  store: getPaymentModes,
 });
 
 export default function PaymentModeGrid() {
-  const onToolbarPreparing = (e) => {
-    exportButton.options.onClick = () => {
-      exportToPDF(e.component, "PaymentMode");
-    };
+  const setToolbar = (e) => {
+    onToolbarPreparing(e, "Payment Modes");
+  };
 
-    e.toolbarOptions.items.unshift(exportButton);
-    e.toolbarOptions.items[2].location = "before";
+  const onInitNewRow = (e) => {
+    e.data.active = true;
+    e.data.useincutoffs = true;
   };
 
   return (
     <div>
       <DataGrid
-        onToolbarPreparing={onToolbarPreparing}
+        onToolbarPreparing={setToolbar}
         dataSource={dataSource}
         showBorders={true}
         showRowLines={true}
+        onInitNewRow={onInitNewRow}
         rowAlternationEnabled={true}
       >
         <Editing
           allowUpdating={true}
           allowAdding={true}
           allowDeleting={true}
-          mode="row"
+          mode="form"
         />
         <Column dataField="name" caption="Name" dataType="string" />
         <Column

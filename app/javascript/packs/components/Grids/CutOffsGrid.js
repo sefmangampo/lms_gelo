@@ -10,34 +10,36 @@ import DataGrid, {
   ColumnChooser,
   Export,
   RequiredRule,
+  CustomRule,
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
 import { getCutOffs, getPaymentModes } from "../../data/";
-import { exportToPDF, exportButton } from "./Helpers/ExportToPDF";
+import { onToolbarPreparing } from "./Helpers";
 
 const dataSource = new DataSource({
   key: "id",
-  store: getCutOffs(),
+  store: getCutOffs,
 });
 
 export default function CutOffsGrid() {
   const [pModes, setPModes] = useState(null);
 
-  const onToolbarPreparing = (e) => {
-    exportButton.options.onClick = () => {
-      exportToPDF(e.component, "CutOffs");
-    };
-
-    e.toolbarOptions.items.unshift(exportButton);
-    e.toolbarOptions.items[2].location = "before";
+  const setToolbar = (e) => {
+    onToolbarPreparing(e, "Cut Offs");
   };
 
   const paymentModes = async () => {
-    const data = await getPaymentModes().load();
+    const data = await getPaymentModes.load();
     const modes = data.filter((item) => item.active && item.useincutoffs);
 
     setPModes(modes);
+  };
+
+  const onInitNewRow = (e) => {
+    e.data.active = true;
+    e.data.paymentmodeid = 2;
+    e.data.startdate = new Date();
   };
 
   useEffect(() => {
@@ -54,20 +56,28 @@ export default function CutOffsGrid() {
         e.editorOptions.onValueChanged = ({ value }) => {
           e.row.data.paymentmodeid = value;
         };
-
-        if (e.row.isNewRow) {
-          e.editorOptions.onInitialized = (e) => {
-            e.component.option("value", 2);
-          };
-        }
-      }
-
-      if (e.dataField == "active" && e.row.isNewRow) {
-        e.editorOptions.onInitialized = (e) => {
-          e.component.option("value", true);
-        };
       }
     }
+  };
+
+  const startDateValidation = ({ data, value, rule }) => {
+    if (data.enddate) {
+      if (new Date(data.enddate) < new Date(value)) {
+        rule.message = "Start Date must not be greater than End Date";
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const EndDateValidation = ({ data, value, rule }) => {
+    if (data.startdate) {
+      if (new Date(data.startdate) > new Date(value)) {
+        rule.message = "End Date must not be less than Start Date";
+        return false;
+      }
+    }
+    return true;
   };
 
   const LUdataSource = {
@@ -88,8 +98,9 @@ export default function CutOffsGrid() {
         dataSource={dataSource}
         showBorders={true}
         showRowLines={true}
+        onInitNewRow={onInitNewRow}
         rowAlternationEnabled={true}
-        onToolbarPreparing={onToolbarPreparing}
+        onToolbarPreparing={setToolbar}
         onEditorPreparing={onEditorPreparing}
       >
         <Editing
@@ -120,6 +131,7 @@ export default function CutOffsGrid() {
           editorOptions={dataEditorOptions}
         >
           <RequiredRule />
+          <CustomRule validationCallback={startDateValidation} />
         </Column>
         <Column
           dataField="enddate"
@@ -128,6 +140,7 @@ export default function CutOffsGrid() {
           editorOptions={dataEditorOptions}
         >
           <RequiredRule />
+          <CustomRule validationCallback={EndDateValidation} />
         </Column>
         <Column dataField="active" caption="Active" dataType="boolean"></Column>
         <Export enabled={true} allowExportSelectedData={true} />

@@ -5,6 +5,8 @@ class CreateLeaves < ActiveRecord::Migration[6.1]
       t.date :datefiled
       t.date :dateeffective
       t.integer :leavetypeid
+      t.integer :cutoffid
+      t.integer :quantity
       t.integer :status
       t.integer :year
 

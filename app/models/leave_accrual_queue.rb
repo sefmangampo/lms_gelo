@@ -1,0 +1,2 @@
+class LeaveAccrualQueue < ApplicationRecord
+end
