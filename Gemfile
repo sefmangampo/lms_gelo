@@ -27,7 +27,7 @@ gem 'devise'
 # gem 'image_processing', '~> 1.2'
 gem 'roo', '~> 2.4'
 gem 'rubyzip', '>= 1.2.1'
-gem 'mimemagic', github: 'mimemagicrb/mimemagic', ref: '01f92d86d15d85cfd0f20dabd025dcbd36a8a60f'
+#gem 'mimemagic', github: 'mimemagicrb/mimemagic', ref: '01f92d86d15d85cfd0f20dabd025dcbd36a8a60f'
 gem 'axlsx'
 gem 'caxlsx_rails'
 
