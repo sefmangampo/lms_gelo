@@ -1,12 +1,9 @@
-//import { getEmployees } from "./Employee";
-//import { getPaymentModes } from "./PaymentMode";
-//import { getCutOffs } from "./CutOffs";
-//import { getLeaveStatuses } from "./LeaveStatus";
-//import { getLeaveTypes } from "./LeaveTypes";
-//import { getEmployeeLeaves } from "./EmployeeLeaves";
-//import { getLeaveCredits } from "./LeaveCredits";
-
 import { getStore } from "./Rest";
+import {
+  generateAccruals,
+  processAccrualQueue,
+  generateIndividualAccruals,
+} from "./CustomEndpoints";
 
 const getEmployees = getStore("employees");
 const getPaymentModes = getStore("payment_mode");
@@ -22,6 +19,9 @@ const getLeaveAccrualTypes = getStore("leave_accrual_types");
 const getCampaigns = getStore("campaign");
 const getPositions = getStore("position");
 const getUnderTimes = getStore("undertime");
+const getAdjustments = getStore("accrual_adjustments");
+const getCutOffGroups = getStore("employee_cut_off_groups");
+const getCutOffGroupMembers = getStore("employee_cut_off_group_members");
 
 const getActiveStore = async (store, setter, directSub = false, id = "id") => {
   const data = directSub ? data : await store.load();
@@ -56,7 +56,6 @@ const getEmployeeFullName = async (filterActive = false) => {
     }
   }
 
-  console.log("new data", newdata, filterActive);
   return {
     store: {
       data: newdata,
@@ -86,4 +85,10 @@ export {
   getActiveStore,
   getUnderTimes,
   getEmployeeFullName,
+  getAdjustments,
+  generateAccruals,
+  processAccrualQueue,
+  generateIndividualAccruals,
+  getCutOffGroupMembers,
+  getCutOffGroups,
 };

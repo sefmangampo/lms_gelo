@@ -47,6 +47,6 @@ class Api::V1::UndertimeController < ApiController
   end
 
   def undertime_params
-    params.permit(:id, :employeeid, :from,:to,:hours ,:cutoffid)
+    params.permit(:id, :date, :Undertime, :employeeid, :from,:to,:hours ,:cutoffid, Undertime: [:to, :from, :employeeid, :date, :cutoffid])
   end
 end

@@ -6,16 +6,33 @@ import DataGrid, {
   Selection,
   ColumnChooser,
   Lookup,
+  Paging,
+  Editing,
+  FilterPanel,
+  FormItem,
+  StateStoring,
+  FilterRow,
+  Summary,
+  TotalItem,
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
+
+import notify from "devextreme/ui/notify";
 
 import {
   getLeaveAccrualSettings,
   getEmployees,
   getLeaveTypes,
+  getActiveStore,
+  generateAccruals,
+  generateIndividualAccruals,
 } from "../../data/";
 
-import { exportToPDF, exportButton } from "./Helpers/ExportToPDF";
+import {
+  onToolbarPreparing,
+  setActiveLookUp,
+  generateCodeFromID,
+} from "./Helpers";
 
 const dataSource = new DataSource({
   key: "id",
@@ -26,13 +43,27 @@ export default function LeaveAccrualSettingsGrid() {
   const [employees, setEmployees] = useState(null);
   const [leaveTypes, setLeaveTypes] = useState(null);
 
-  const onToolbarPreparing = (e) => {
-    exportButton.options.onClick = () => {
-      exportToPDF(e.component, "LeaveAccrualSettings");
-    };
+  const setToolbar = (e) => {
+    const processButton = [
+      {
+        location: "after",
+        widget: "dxButton",
+        options: {
+          icon: "refresh",
+          text: "Process to Queue",
+          onClick: async () => {
+            const res2 = await generateIndividualAccruals();
+            const res = await generateAccruals();
 
-    e.toolbarOptions.items.unshift(exportButton);
-    e.toolbarOptions.items[1].location = "before";
+            const mes = `Records processed.`;
+            notify(mes, "info", 3000);
+            e.component.refresh();
+          },
+        },
+      },
+    ];
+
+    onToolbarPreparing(e, "Accrual Settings", processButton);
   };
 
   const initEmployees = async () => {
@@ -45,16 +76,9 @@ export default function LeaveAccrualSettingsGrid() {
     setEmployees(activeData);
   };
 
-  const initLeaveTypes = async () => {
-    const data = await getLeaveTypes.load();
-    const activeData = data.filter((e) => e.active);
-
-    setLeaveTypes(activeData);
-  };
-
   useEffect(() => {
     initEmployees();
-    initLeaveTypes();
+    getActiveStore(getLeaveTypes, setLeaveTypes);
   }, []);
 
   const EmployeeLUDs = {
@@ -65,12 +89,31 @@ export default function LeaveAccrualSettingsGrid() {
     key: "id",
   };
 
-  const LeaveLUDs = {
-    store: {
-      data: leaveTypes,
-      type: "array",
-    },
-    key: "id",
+  const onInitNewRow = (e) => {
+    e.data.active = true;
+    e.data.isregular = false;
+    e.data.isyearly = false;
+    e.data.rate = 5 / 12;
+    e.data.leavetypeid = 1;
+    e.data.year = new Date().getFullYear();
+  };
+
+  const onEditorPreparing = (e) => {
+    setActiveLookUp(e, "leavetypeid", leaveTypes);
+  };
+
+  const calculateReferenceValue = (rowdata) => {
+    const code = rowdata.id;
+
+    return generateCodeFromID(code, "SE");
+  };
+
+  const onRowPrepared = (e) => {
+    if (e.rowType == "data") {
+      if (e.data.isregular) {
+        e.rowElement.style.color = e.data.isyearly ? "#85C1E9" : "#F7DC6F";
+      }
+    }
   };
 
   return (
@@ -79,9 +122,26 @@ export default function LeaveAccrualSettingsGrid() {
         dataSource={dataSource}
         showBorders={true}
         showRowLines={true}
-        onToolbarPreparing={onToolbarPreparing}
+        allowColumnReordering={true}
+        allowColumnResizing={true}
+        onEditorPreparing={onEditorPreparing}
+        onInitNewRow={onInitNewRow}
+        onRowPrepared={onRowPrepared}
+        onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
       >
+        <FilterPanel visible={true} />
+        <FilterRow visible={true} />
+        <Paging pageSize={10} />
+        <StateStoring enabled={true} type="localStorage" storageKey="storage" />
+        <Column
+          name="code"
+          width={100}
+          caption="Code"
+          calculateCellValue={calculateReferenceValue}
+        >
+          <FormItem visible={false} />
+        </Column>
         <Column dataField="employeeid" caption="Employee" dataType="number">
           <Lookup
             valueExpr="id"
@@ -95,7 +155,7 @@ export default function LeaveAccrualSettingsGrid() {
             valueExpr="id"
             allowClearing={true}
             displayExpr="name"
-            dataSource={LeaveLUDs}
+            dataSource={getLeaveTypes}
           />
         </Column>
         <Column dataField="year" caption="Year" dataType="number" />
@@ -106,12 +166,14 @@ export default function LeaveAccrualSettingsGrid() {
           caption="Credited Per Year"
           dataType="boolean"
         />
-
-        <Column dataField="remarks" caption="Remark" dataType="string" />
         <Column dataField="active" caption="Active" dataType="boolean" />
         <Export enabled={true} allowExportSelectedData={true} />
         <Selection mode="multiple" />
+        <Editing allowDeleting={true} />
         <ColumnChooser enabled={true} mode="select" />
+        <Summary>
+          <TotalItem column="employeeid" summaryType="count" />
+        </Summary>
       </DataGrid>
     </div>
   );

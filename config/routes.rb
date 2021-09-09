@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
 
+
   namespace :api do 
     namespace :v1 do
 
+        post 'process_accrual_queue', to: 'leave_accrual_queue#process_queue'
+        post 'generate_accruals', to: 'leave_accrual_queue#generate_accruals'
+        post 'generate_individual_accruals', to: 'leave_accrual_queue#generate_individual_accruals'
+        
         get 'employees', to: 'employees#index'
         get 'employees/:id', to: 'employees#show'
         post 'employees', to: 'employees#create'
@@ -87,6 +92,23 @@ Rails.application.routes.draw do
         delete 'leave_accrual_types/:id', to: 'leave_accrual_types#destroy'
         patch 'leave_accrual_types/:id', to: 'leave_accrual_types#update'
 
+        get 'accrual_adjustments', to: 'accrual_adjustments#index'
+        get 'accrual_adjustments/:id', to: 'accrual_adjustments#show'
+        post 'accrual_adjustments', to: 'accrual_adjustments#create'
+        delete 'accrual_adjustments/:id', to: 'accrual_adjustments#destroy'
+        patch 'accrual_adjustments/:id', to: 'accrual_adjustments#update'
+
+        get 'employee_cut_off_groups', to: 'employee_cut_off_groups#index'
+        get 'employee_cut_off_groups/:id', to: 'employee_cut_off_groups#show'
+        post 'employee_cut_off_groups', to: 'employee_cut_off_groups#create'
+        delete 'employee_cut_off_groups/:id', to: 'employee_cut_off_groups#destroy'
+        patch 'employee_cut_off_groups/:id', to: 'employee_cut_off_groups#update'
+
+        get 'employee_cut_off_group_members', to: 'employee_cut_off_group_members#index'
+        get 'employee_cut_off_group_members/:id', to: 'employee_cut_off_group_members#show'
+        post 'employee_cut_off_group_members', to: 'employee_cut_off_group_members#create'
+        delete 'employee_cut_off_group_members/:id', to: 'employee_cut_off_group_members#destroy'
+        patch 'employee_cut_off_group_members/:id', to: 'employee_cut_off_group_members#update'
     end
   end
 

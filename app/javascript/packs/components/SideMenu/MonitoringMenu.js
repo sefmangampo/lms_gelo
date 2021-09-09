@@ -21,15 +21,15 @@ const items = [
   },
   {
     id: "5",
-    text: "Accrual Adjustments",
-  },
-  {
-    id: "6",
     text: "Accrual Queue",
   },
   {
-    id: "7",
+    id: "6",
     text: "Accrual Settings",
+  },
+  {
+    id: "7",
+    text: "Accrual Adjustments",
   },
 ];
 

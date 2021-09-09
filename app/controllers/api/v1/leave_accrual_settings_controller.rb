@@ -42,11 +42,11 @@ class Api::V1::LeaveAccrualSettingsController < ApiController
 
   private 
 
-  def set_leave_accrual
+  def set_leave_accrual_settings
     @leave_accrual_setting = LeaveAccrualSetting.find(params[:id])
   end
 
   def leave_accrual_settings_params
-    params.permit(:id, :employeeid, :isregular ,:rate, :year, :isyearly, :active, :leavetypeid)
+    params.permit(:id, :employeeid, :leave_accrual_setting, :isregular ,:rate, :year, :isyearly, :active, :leavetypeid)
   end
 end

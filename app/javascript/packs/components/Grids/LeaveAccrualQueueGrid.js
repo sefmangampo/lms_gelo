@@ -1,101 +1,191 @@
 import React, { useState, useEffect } from "react";
 
 import DataGrid, {
-    Column,
-    Export,
-    Selection,
-    Lookup,
+  Column,
+  Export,
+  Selection,
+  Lookup,
+  ColumnChooser,
+  FilterRow,
+  Editing,
+  Summary,
+  TotalItem,
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
-import { getLeaveAccrualQueue, getEmployees, getLeaveTypes } from "../../data/";
+import notify from "devextreme/ui/notify";
 
-import { exportToPDF, exportButton } from "./Helpers/ExportToPDF";
+import {
+  getLeaveAccrualQueue,
+  getEmployees,
+  getLeaveTypes,
+  getActiveStore,
+  getLeaveAccrualTypes,
+  processAccrualQueue,
+} from "../../data/";
+
+import { onToolbarPreparing, generateCodeFromID } from "./Helpers";
 
 const dataSource = new DataSource({
-    key: "id",
-    store: getLeaveAccrualQueue,
+  key: "id",
+  store: getLeaveAccrualQueue,
 });
 
 export default function LeaveAccrualQueueGrid() {
-    const [employees, setEmployees] = useState(null);
-    const [leaveTypes, setLeaveTypes] = useState(null);
+  const [employees, setEmployees] = useState(null);
+  const [leaveTypes, setLeaveTypes] = useState(null);
+  const [accrualTypes, setAccrualTypes] = useState(null);
 
-    const onToolbarPreparing = (e) => {
-        exportButton.options.onClick = () => {
-            exportToPDF(e.component, "LeaveAccrualQueue");
-        };
+  const setToolbar = (e) => {
+    const processButton = [
+      {
+        location: "after",
+        widget: "dxButton",
+        options: {
+          icon: "refresh",
+          text: "Process Accruals",
+          onClick: async () => {
+            const res = await processAccrualQueue();
 
-        e.toolbarOptions.items.unshift(exportButton);
-        e.toolbarOptions.items[1].location = "before";
-    };
+            console.log("rest");
 
-    const initEmployees = async () => {
-        const data = await getEmployees.load();
-        const activeData = data.filter((e) => e.active);
+            if (res) {
+              const number = res.Result;
 
-        activeData.map((d) => {
-            d.name = `${d.lastname}, ${d.firstname} ${d.middlename}`;
-        });
-        setEmployees(activeData);
-    };
-
-    const initLeaveTypes = async () => {
-        const data = await getLeaveTypes.load();
-        const activeData = data.filter((e) => e.active);
-
-        setLeaveTypes(activeData);
-    };
-
-    useEffect(() => {
-        initEmployees();
-        initLeaveTypes();
-    }, []);
-
-    const EmployeeLUDs = {
-        store: {
-            data: employees,
-            type: "array",
+              let mes = "";
+              if (res.Result == 1) {
+                mes = `1 record processed.`;
+                notify(mes, "success", 3000);
+                e.component.refresh();
+              } else if (res.Result > 1) {
+                mes = `${number} records processed.`;
+                notify(mes, "success", 3000);
+                e.component.refresh();
+              } else {
+                notify("No records processed.", "info", 3000);
+              }
+            }
+          },
         },
-        key: "id",
-    };
+      },
+    ];
+    onToolbarPreparing(e, "Accruals Queue", processButton);
+  };
 
-    const LeaveLUDs = {
-        store: {
-            data: leaveTypes,
-            type: "array",
-        },
-        key: "id",
-    };
+  const initEmployees = async () => {
+    const data = await getEmployees.load();
+    const activeData = data.filter((e) => e.active);
 
-    return <div>
-        <DataGrid
-            dataSource={dataSource}
-            showBorders={true}
-            showRowLines={true}
-            onToolbarPreparing={onToolbarPreparing}
-            rowAlternationEnabled={true}
+    activeData.map((d) => {
+      d.name = `${d.lastname}, ${d.firstname} ${d.middlename}`;
+    });
+    setEmployees(activeData);
+  };
+
+  useEffect(() => {
+    initEmployees();
+    getActiveStore(getLeaveAccrualTypes, setAccrualTypes);
+    getActiveStore(getLeaveTypes, setLeaveTypes);
+  }, []);
+
+  const EmployeeLUDs = {
+    store: {
+      data: employees,
+      type: "array",
+    },
+    key: "id",
+  };
+
+  const calculateCellValue = (rowdata) => {
+    const code = rowdata.id;
+    return generateCodeFromID(code, "QU");
+  };
+
+  const calculateReferenceValue = (rowdata) => {
+    const code = rowdata.referenceid;
+
+    return generateCodeFromID(code, "SE");
+  };
+
+  const onRowPrepared = (e) => {
+    if (e.rowType == "data") {
+      e.rowElement.style.color = e.data.posted ? "#7DCEA0" : "#F7DC6F";
+    }
+  };
+
+  return (
+    <div>
+      <DataGrid
+        dataSource={dataSource}
+        showBorders={true}
+        allowColumnReordering={true}
+        allowColumnResizing={true}
+        showRowLines={true}
+        onRowPrepared={onRowPrepared}
+        onToolbarPreparing={setToolbar}
+        rowAlternationEnabled={true}
+      >
+        <Editing allowDeleting={true} />
+        <Column
+          name="code"
+          width={100}
+          caption="Code"
+          calculateCellValue={calculateCellValue}
+        />
+        <Column dataField="employeeid" caption="Employee" dataType="number">
+          <Lookup
+            valueExpr="id"
+            allowClearing={true}
+            displayExpr="name"
+            dataSource={EmployeeLUDs}
+          />
+        </Column>
+        <Column dataField="leavetypeid" caption="Leave Type" dataType="number">
+          <Lookup
+            valueExpr="id"
+            allowClearing={true}
+            displayExpr="name"
+            dataSource={leaveTypes}
+          />
+        </Column>
+        <Column
+          dataField="accrualtypeid"
+          caption="Accrual Type"
+          dataType="number"
         >
-            <Column dataField="employeeid" caption="Employee" dataType="number">
-                <Lookup
-                    valueExpr="id"
-                    allowClearing={true}
-                    displayExpr="name"
-                    dataSource={EmployeeLUDs}
-                />
-            </Column>
-            <Column dataField="leavetypeid" caption="Leave Type" dataType="number">
-                <Lookup
-                    valueExpr="id"
-                    allowClearing={true}
-                    displayExpr="name"
-                    dataSource={LeaveLUDs}
-                />
-            </Column>
-            <Column dataField="dateeffective" caption="Date Effective" dataType="date" />
-            <Column dataField="valuetoadd" caption="Value to Add" dataType="number" />
-            <Export enabled={true} allowExportSelectedData={true} />
-            <Selection mode="multiple" />
-        </DataGrid>
-    </div>;
+          <Lookup
+            valueExpr="id"
+            allowClearing={true}
+            displayExpr="name"
+            dataSource={accrualTypes}
+          />
+        </Column>
+        <Column
+          dataField="dateeffective"
+          caption="Date Effective"
+          dataType="date"
+        />
+        <Column
+          name="basis"
+          width={100}
+          caption="Basis"
+          calculateCellValue={calculateReferenceValue}
+        />
+        <Column dataField="posted" caption="Posted" dataType="boolean" />
+        <Column
+          dataField="valuetoadd"
+          caption="Value to Add"
+          dataType="number"
+        />
+        <Column dataField="year" caption="Year" width={75} dataType="number" />
+        <Export enabled={true} allowExportSelectedData={true} />
+        <Selection mode="multiple" />
+        <ColumnChooser enabled={true} mode="select" />
+        <FilterRow visible={true} />
+        <Summary>
+          <TotalItem column="employeeid" summaryType="count" />
+        </Summary>
+      </DataGrid>
+    </div>
+  );
 }

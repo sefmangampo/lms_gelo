@@ -6,6 +6,7 @@ class CreateCutOffs < ActiveRecord::Migration[6.1]
       t.date :startdate
       t.date :enddate
       t.boolean :active
+      t.integer :year
 
       t.timestamps
     end

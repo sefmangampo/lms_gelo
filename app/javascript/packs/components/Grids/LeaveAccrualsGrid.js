@@ -5,12 +5,24 @@ import DataGrid, {
   Export,
   Selection,
   Lookup,
+  FilterRow,
+  Paging,
+  FormItem,
+  StateStoring,
   Editing,
+  ColumnChooser,
+  Summary,
+  TotalItem,
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
-import { getLeaveAccruals, getEmployees, getLeaveAccrualTypes } from "../../data/";
-import { exportToPDF, exportButton } from "./Helpers/ExportToPDF";
+import {
+  getLeaveAccruals,
+  getEmployees,
+  getLeaveAccrualTypes,
+} from "../../data/";
+
+import { onToolbarPreparing, generateCodeFromID } from "./Helpers";
 
 const dataSource = new DataSource({
   key: "id",
@@ -19,22 +31,9 @@ const dataSource = new DataSource({
 
 export default function LeaveAccrualsGrid() {
   const [employees, setEmployees] = useState(null);
-  const [accrualTypes, setAccrualTypes] = useState(null);
 
-  const onToolbarPreparing = (e) => {
-    exportButton.options.onClick = () => {
-      exportToPDF(e.component, "LeaveCredits");
-    };
-
-    e.toolbarOptions.items.unshift(exportButton);
-    e.toolbarOptions.items[1].location = "before";
-  };
-
-  const initAccrualTypes = async () => {
-    const data = await getLeaveAccrualTypes.load();
-    const activeData = data.filter((e) => e.active);
-
-    setAccrualTypes(activeData);
+  const setToolbar = (e) => {
+    onToolbarPreparing(e, "Leave Accruals");
   };
 
   const initEmployees = async () => {
@@ -47,10 +46,8 @@ export default function LeaveAccrualsGrid() {
     setEmployees(activeData);
   };
 
-
   useEffect(() => {
     initEmployees();
-    initAccrualTypes();
   }, []);
 
   const EmployeeLUDs = {
@@ -61,12 +58,32 @@ export default function LeaveAccrualsGrid() {
     key: "id",
   };
 
-  const accrualLUDs = {
-    store: {
-      data: accrualTypes,
-      type: "array",
-    },
-    key: "id",
+  const onInitNewRow = (e) => {
+    e.data.issystemgenerated = false;
+  };
+
+  const calculateCellValue = (rowdata) => {
+    const code = rowdata.id;
+    return generateCodeFromID(code, "AC");
+  };
+
+  const calculateReferenceValue = (rowdata) => {
+    const code = rowdata.referenceid;
+    const text = rowdata.issystemgenerated ? "QU" : "AD";
+
+    return generateCodeFromID(code, text);
+  };
+
+  const onRowPrepared = (e) => {
+    if (e.rowType == "data") {
+      if (e.data.leaveaccrualtypeid == 2) {
+        e.rowElement.style.color = "#85C1E9";
+      } else if (e.data.leaveaccrualtypeid == 1) {
+        e.rowElement.style.color = "#F7DC6F";
+      } else {
+        e.rowElement.style.color = "#73C6B6";
+      }
+    }
   };
 
   return (
@@ -75,10 +92,18 @@ export default function LeaveAccrualsGrid() {
         dataSource={dataSource}
         showBorders={true}
         showRowLines={true}
-        onToolbarPreparing={onToolbarPreparing}
+        allowColumnResizing={true}
+        allowColumnReordering={true}
+        onInitNewRow={onInitNewRow}
+        onRowPrepared={onRowPrepared}
+        onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
       >
-        <Editing allowAdding={true} allowUpdating={true} allowDeleting={true} />
+        <FilterRow visible={true} />
+        <Editing allowDeleting={true} />
+        <Paging pageSize={10} />
+        <StateStoring enabled={true} type="localStorage" storageKey="storage" />
+        <ColumnChooser enabled={true} mode="select" />
         <Column dataField="employeeid" caption="Employee" dataType="number">
           <Lookup
             valueExpr="id"
@@ -87,28 +112,51 @@ export default function LeaveAccrualsGrid() {
             dataSource={EmployeeLUDs}
           />
         </Column>
-        <Column dataField="leaveaccrualtypeid" caption="Accrual Type" dataType="number">
+        <Column
+          dataField="leaveaccrualtypeid"
+          caption="Accrual Type"
+          dataType="number"
+        >
           <Lookup
             valueExpr="id"
             allowClearing={true}
             displayExpr="name"
-            dataSource={accrualLUDs}
+            dataSource={getLeaveAccrualTypes}
           />
         </Column>
+        <Column
+          name="code"
+          width={100}
+          caption="Code"
+          calculateCellValue={calculateCellValue}
+        >
+          <FormItem visible={false} />
+        </Column>
+        <Column
+          name="referencecode"
+          width={100}
+          caption="Reference"
+          calculateCellValue={calculateReferenceValue}
+        />
         <Column dataField="dategiven" caption="Date Given" dataType="date" />.
         <Column
           dataField="valueadded"
           caption="Value Added"
           dataType="number"
         />
+        <Column dataField="year" caption="Year" width={75} dataType="number" />
         <Column dataField="remarks" caption="Remark" dataType="string" />
         <Column
           dataField="issystemgenerated"
           caption="System Generated"
           dataType="boolean"
+          allowEditing={false}
         />
         <Export enabled={true} allowExportSelectedData={true} />
         <Selection mode="multiple" />
+        <Summary>
+          <TotalItem column="employeeid" summaryType="count" />
+        </Summary>
       </DataGrid>
     </div>
   );

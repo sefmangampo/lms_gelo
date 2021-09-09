@@ -8,6 +8,8 @@ import {
   LeaveAccrualSettingsGrid,
   LeaveAccrualsGrid,
   LeaveAccrualQueueGrid,
+  AdjustmentsGrid,
+  UndertimeGrid,
 } from "../../Grids";
 
 import css from "./LeaveMonitoring.module.scss";
@@ -22,10 +24,11 @@ export default function LeaveMonitoringTab() {
       <div className={css.contentbar}>
         {selectedItem === 0 && <EmployeeLeavesGrid />}
         {selectedItem === 1 && <LeaveCreditsGrid />}
-
+        {selectedItem === 2 && <UndertimeGrid />}
         {selectedItem === 3 && <LeaveAccrualsGrid />}
         {selectedItem === 4 && <LeaveAccrualQueueGrid />}
         {selectedItem === 5 && <LeaveAccrualSettingsGrid />}
+        {selectedItem === 6 && <AdjustmentsGrid />}
       </div>
     </div>
   );

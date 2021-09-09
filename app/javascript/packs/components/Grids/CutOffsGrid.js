@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import DataGrid, {
   Column,
@@ -16,6 +16,7 @@ import DataSource from "devextreme/data/data_source";
 
 import { getCutOffs, getPaymentModes } from "../../data/";
 import { onToolbarPreparing } from "./Helpers";
+import { start } from "turbolinks";
 
 const dataSource = new DataSource({
   key: "id",
@@ -24,22 +25,53 @@ const dataSource = new DataSource({
 
 export default function CutOffsGrid() {
   const [pModes, setPModes] = useState(null);
+  const [pmLu, setPmLu] = useState(null);
+
+  const datagridRef = useRef(null);
 
   const setToolbar = (e) => {
-    onToolbarPreparing(e, "Cut Offs");
+    const filterSelectBox = [
+      {
+        location: "after",
+        widget: "dxSelectBox",
+        options: {
+          dataSource: pmLu,
+          displayExpr: "name",
+          valueExpr: "id",
+          value: 0,
+          onValueChanged: ({ value }) => {
+            const grid = datagridRef.current.instance;
+
+            if (value === 0) {
+              grid.clearFilter();
+            } else {
+              grid.filter(["paymentmodeid", "=", value]);
+            }
+          },
+        },
+      },
+    ];
+
+    onToolbarPreparing(e, "Cut Offs", filterSelectBox);
   };
 
   const paymentModes = async () => {
     const data = await getPaymentModes.load();
     const modes = data.filter((item) => item.active && item.useincutoffs);
-
     setPModes(modes);
+
+    const newModes = [{ id: 0, name: "All" }, ...modes];
+
+    setPmLu(newModes);
   };
 
   const onInitNewRow = (e) => {
+    const today = new Date();
+
     e.data.active = true;
     e.data.paymentmodeid = 2;
-    e.data.startdate = new Date();
+    e.data.startdate = today;
+    e.data.year = today.getFullYear();
   };
 
   useEffect(() => {
@@ -92,16 +124,41 @@ export default function CutOffsGrid() {
     openOnFieldClick: true,
   };
 
+  const setYearValue = (newData, value, currentRowData) => {
+    const tod = new Date(value);
+
+    newData.year = tod.getFullYear();
+    newData.startdate = value;
+
+    const daystoadd = currentRowData.paymentmodeid == 2 ? 14 : 6;
+    newData.enddate = new Date(tod.setDate(tod.getDate() + daystoadd));
+  };
+
+  const setPayMode = (newData, value, currentData) => {
+    const startDate = currentData.startDate
+      ? new Date(currentData.startDate)
+      : new Date();
+
+    const daystoadd = value == 2 ? 14 : 6;
+
+    newData.paymentmodeid = value;
+    newData.enddate = new Date(
+      startDate.setDate(startDate.getDate() + daystoadd)
+    );
+  };
+
   return (
     <div>
       <DataGrid
+        ref={datagridRef}
         dataSource={dataSource}
         showBorders={true}
         showRowLines={true}
         onInitNewRow={onInitNewRow}
+        allowColumnReordering={true}
+        allowColumnResizing={true}
         rowAlternationEnabled={true}
         onToolbarPreparing={setToolbar}
-        onEditorPreparing={onEditorPreparing}
       >
         <Editing
           allowUpdating={true}
@@ -121,13 +178,19 @@ export default function CutOffsGrid() {
         <Column dataField="name" caption="Name" dataType="string">
           <RequiredRule />
         </Column>
-        <Column dataField="paymentmodeid" caption="Type">
+        <Column dataField="year" caption="Year" dataType="string"></Column>
+        <Column
+          dataField="paymentmodeid"
+          caption="Type"
+          setCellValue={setPayMode}
+        >
           <Lookup valueExpr="id" displayExpr="name" dataSource={LUdataSource} />
         </Column>
         <Column
           dataField="startdate"
           caption="Start Date"
           dataType="date"
+          setCellValue={setYearValue}
           editorOptions={dataEditorOptions}
         >
           <RequiredRule />

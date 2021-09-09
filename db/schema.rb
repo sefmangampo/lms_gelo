@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_06_121255) do
+ActiveRecord::Schema.define(version: 2021_09_09_102907) do
+
+  create_table "accrual_adjustments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "employeeid"
+    t.float "rate"
+    t.date "dateeffective"
+    t.string "remarks"
+    t.integer "year"
+    t.integer "createdbyid"
+    t.boolean "posted"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "accrual_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
@@ -34,6 +46,24 @@ ActiveRecord::Schema.define(version: 2021_09_06_121255) do
     t.boolean "active"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "year"
+  end
+
+  create_table "employee_cut_off_group_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "cutoffgroupid"
+    t.integer "employeeid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "employee_cut_off_groups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "paymodeid"
+    t.integer "cutoffid"
+    t.boolean "active"
+    t.integer "year"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "employee_cutoffs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -55,6 +85,9 @@ ActiveRecord::Schema.define(version: 2021_09_06_121255) do
     t.boolean "active"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "positionid"
+    t.integer "managerid"
+    t.integer "campaignid"
   end
 
   create_table "leave_accrual_queues", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -64,6 +97,10 @@ ActiveRecord::Schema.define(version: 2021_09_06_121255) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "leavetypeid"
+    t.integer "year"
+    t.boolean "posted"
+    t.integer "accrualtypeid"
+    t.integer "referenceid"
   end
 
   create_table "leave_accrual_settings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -87,7 +124,9 @@ ActiveRecord::Schema.define(version: 2021_09_06_121255) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "leavetypeid"
-    t.integer :leaveaccrualtypeid
+    t.integer "leaveaccrualtypeid"
+    t.integer "year"
+    t.integer "referenceid"
   end
 
   create_table "leave_credits", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -144,12 +183,26 @@ ActiveRecord::Schema.define(version: 2021_09_06_121255) do
 
   create_table "undertimes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "employeeid"
-    t.date "from"
-    t.date "to"
     t.float "hours"
     t.integer "cutoffid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "from"
+    t.datetime "to"
+    t.date "date"
+  end
+
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "username"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
 end

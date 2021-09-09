@@ -40,6 +40,33 @@ class Api::V1::LeaveAccrualQueueController < ApiController
   
   end
 
+  def generate_accruals
+
+    year = Date.current.year if params[:year].blank?   
+    res = ActiveRecord::Base.connection.exec_query("call sp_generateEmployeeAccruals(#{year})")
+
+
+    render json: res[0]
+  end
+
+  def generate_individual_accruals
+    year = Date.current.year if params[:year].blank? 
+
+    res = ActiveRecord::Base.connection.exec_query("call generate_employee_accruals_monthly(#{year})")
+
+    render json: res[0]
+  end
+
+
+  def process_queue
+
+    year = Date.current.year if params[:year].blank?   
+    res = ActiveRecord::Base.connection.exec_query("call sp_process_accrual_queues(#{year})")
+
+    render json: res[0]
+
+  end
+
   private 
 
   def set_leave_accrual_queue

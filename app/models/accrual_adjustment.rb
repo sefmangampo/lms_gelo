@@ -1,0 +1,2 @@
+class AccrualAdjustment < ApplicationRecord
+end

@@ -8,6 +8,8 @@ class CreateLeaveAccruals < ActiveRecord::Migration[6.1]
       t.integer :leaveaccrualtypeid
       t.string :remarks
       t.boolean :issystemgenerated
+      t.integer :year
+      t.integer :referenceid
 
       t.timestamps
     end

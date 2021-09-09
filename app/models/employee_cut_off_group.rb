@@ -1,0 +1,2 @@
+class EmployeeCutOffGroup < ApplicationRecord
+end

@@ -13,6 +13,8 @@ import DataGrid, {
   FilterRow,
   ColumnChooser,
   RequiredRule,
+  Summary,
+  TotalItem,
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
@@ -22,9 +24,14 @@ import {
   getLeaveStatuses,
   getLeaveTypes,
   getCutOffs,
+  getActiveStore,
 } from "../../data/";
 
-import { exportToPDF, exportButton, generateCodeFromID } from "./Helpers";
+import {
+  onToolbarPreparing,
+  setActiveLookUp,
+  generateCodeFromID,
+} from "./Helpers";
 
 const dataSource = new DataSource({
   key: "id",
@@ -39,13 +46,8 @@ export default function EmployeeLeavesGrid() {
 
   const dataGridRef = useRef(null);
 
-  const onToolbarPreparing = (e) => {
-    exportButton.options.onClick = () => {
-      exportToPDF(e.component, "EmployeeLeaves");
-    };
-
-    e.toolbarOptions.items.unshift(exportButton);
-    e.toolbarOptions.items[2].location = "before";
+  const setToolbar = (e) => {
+    onToolbarPreparing(e, "Leaves");
   };
 
   const initEmployees = async () => {
@@ -58,20 +60,6 @@ export default function EmployeeLeavesGrid() {
     setEmployees(activeData);
   };
 
-  const initStatuses = async () => {
-    const data = await getLeaveStatuses.load();
-    const activeData = data.filter((e) => e.active);
-
-    setStatuses(activeData);
-  };
-
-  const initLeaveTypes = async () => {
-    const data = await getLeaveTypes.load();
-    const activeData = data.filter((e) => e.active);
-
-    setLeaveTypes(activeData);
-  };
-
   const initCutOffs = async () => {
     const data = await getCutOffs.load();
     setCutoffs(data.reverse());
@@ -79,8 +67,8 @@ export default function EmployeeLeavesGrid() {
 
   useEffect(() => {
     initEmployees();
-    initStatuses();
-    initLeaveTypes();
+    getActiveStore(getLeaveStatuses, setStatuses);
+    getActiveStore(getLeaveTypes, setLeaveTypes);
     initCutOffs();
   }, []);
 
@@ -95,22 +83,6 @@ export default function EmployeeLeavesGrid() {
   const EmployeeLUDs = {
     store: {
       data: employees,
-      type: "array",
-    },
-    key: "id",
-  };
-
-  const LeaveLUDs = {
-    store: {
-      data: leaveTypes,
-      type: "array",
-    },
-    key: "id",
-  };
-
-  const StatusLUDs = {
-    store: {
-      data: statuses,
       type: "array",
     },
     key: "id",
@@ -169,16 +141,38 @@ export default function EmployeeLeavesGrid() {
     return generateCodeFromID(code, "LV");
   };
 
+  const onEditorPreparing = (e) => {
+    setActiveLookUp(e, "leavetypeid", leaveTypes);
+    setActiveLookUp(e, "status", statuses);
+  };
+
+  const onRowPrepared = (e) => {
+    if (e.rowType == "data") {
+      let color = "";
+      if (e.data.status == 3) {
+        color = "#F1948A";
+      } else if (e.data.status == 2) {
+        color = "#7DCEA0";
+      } else {
+        color = "#F7DC6F";
+      }
+      e.rowElement.style.color = color;
+    }
+  };
+
   return (
     <div>
       <DataGrid
         ref={dataGridRef}
         dataSource={dataSource}
         allowColumnResizing={true}
+        allowColumnReordering={true}
         showBorders={true}
         showRowLines={true}
+        onRowPrepared={onRowPrepared}
+        onEditorPreparing={onEditorPreparing}
         filterBuilder={filterBuilder}
-        onToolbarPreparing={onToolbarPreparing}
+        onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
       >
         <FilterPanel visible={true} />
@@ -221,7 +215,7 @@ export default function EmployeeLeavesGrid() {
             valueExpr="id"
             allowClearing={true}
             displayExpr="name"
-            dataSource={LeaveLUDs}
+            dataSource={getLeaveTypes}
           />
           <RequiredRule />
         </Column>
@@ -287,7 +281,7 @@ export default function EmployeeLeavesGrid() {
             valueExpr="id"
             allowClearing={true}
             displayExpr="name"
-            dataSource={StatusLUDs}
+            dataSource={getLeaveStatuses}
           />
         </Column>
         <Column
@@ -299,6 +293,9 @@ export default function EmployeeLeavesGrid() {
         >
           <FormItem visible={false} />
         </Column>
+        <Summary>
+          <TotalItem column="employeeid" summaryType="count" />
+        </Summary>
       </DataGrid>
     </div>
   );
