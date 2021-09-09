@@ -35,6 +35,10 @@ const items = [
     id: "8",
     text: "Positions",
   },
+  {
+    id: "9",
+    text: "Payment Mode Groups",
+  },
 ];
 
 export default function MaintanceMenu({ setSelectedItem }) {

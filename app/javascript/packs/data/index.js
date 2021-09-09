@@ -3,6 +3,7 @@ import {
   generateAccruals,
   processAccrualQueue,
   generateIndividualAccruals,
+  loadEmployeesToGroups,
 } from "./CustomEndpoints";
 
 const getEmployees = getStore("employees");
@@ -91,4 +92,5 @@ export {
   generateIndividualAccruals,
   getCutOffGroupMembers,
   getCutOffGroups,
+  loadEmployeesToGroups,
 };

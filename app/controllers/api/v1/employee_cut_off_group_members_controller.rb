@@ -3,7 +3,7 @@ class Api::V1::EmployeeCutOffGroupMembersController < ApiController
 
     @cutgroups = EmployeeCutOffGroupMember.all
  
-    render json: @cutgroup
+    render json: @cutgroups
 
   end
 
@@ -40,6 +40,14 @@ class Api::V1::EmployeeCutOffGroupMembersController < ApiController
   
   end
 
+  def load_employees_to_cut_off_groups
+
+    res = ActiveRecord::Base.connection.exec_query("call load_employees_to_groups")
+
+    render json: res[0]
+
+  end
+
   private 
 
   def set_cutgroup
@@ -49,3 +57,4 @@ class Api::V1::EmployeeCutOffGroupMembersController < ApiController
   def cutgroups_params
     params.permit(:id, :cutoffgroupid ,:employeeid)
   end
+end

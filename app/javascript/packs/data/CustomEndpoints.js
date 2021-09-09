@@ -19,6 +19,12 @@ const generateIndividualAccruals = async (year) => {
   return res;
 };
 
+const loadEmployeesToGroups = async () => {
+  const link = "load_employees_to_cut_off_groups";
+  const res = await executeSQL(link);
+  return res;
+};
+
 const executeSQL = async (endpoint = "", data = {}) => {
   const url = "/api/v1/" + endpoint;
   const response = await fetch(url, {
@@ -33,4 +39,9 @@ const executeSQL = async (endpoint = "", data = {}) => {
   return response.json();
 };
 
-export { processAccrualQueue, generateIndividualAccruals, generateAccruals };
+export {
+  processAccrualQueue,
+  generateIndividualAccruals,
+  generateAccruals,
+  loadEmployeesToGroups,
+};

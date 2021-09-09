@@ -10,6 +10,7 @@ import {
   LeaveAccrualQueueGrid,
   AdjustmentsGrid,
   UndertimeGrid,
+  CutOffGroupMembersGrid,
 } from "../../Grids";
 
 import css from "./LeaveMonitoring.module.scss";
@@ -29,6 +30,7 @@ export default function LeaveMonitoringTab() {
         {selectedItem === 4 && <LeaveAccrualQueueGrid />}
         {selectedItem === 5 && <LeaveAccrualSettingsGrid />}
         {selectedItem === 6 && <AdjustmentsGrid />}
+        {selectedItem === 7 && <CutOffGroupMembersGrid />}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users
 
   namespace :api do 
     namespace :v1 do
@@ -7,6 +8,9 @@ Rails.application.routes.draw do
         post 'process_accrual_queue', to: 'leave_accrual_queue#process_queue'
         post 'generate_accruals', to: 'leave_accrual_queue#generate_accruals'
         post 'generate_individual_accruals', to: 'leave_accrual_queue#generate_individual_accruals'
+        post 'load_employees_to_cut_off_groups', to: 'employee_cut_off_group_members#load_employees_to_cut_off_groups'
+
+        
         
         get 'employees', to: 'employees#index'
         get 'employees/:id', to: 'employees#show'

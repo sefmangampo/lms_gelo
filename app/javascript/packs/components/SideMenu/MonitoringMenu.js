@@ -31,6 +31,10 @@ const items = [
     id: "7",
     text: "Accrual Adjustments",
   },
+  {
+    id: "8",
+    text: "Payment Group Employees",
+  },
 ];
 
 export default function MonitoringMenu({ setSelectedItem }) {

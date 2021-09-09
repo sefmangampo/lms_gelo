@@ -50,6 +50,7 @@ test:
 #
 production:
   <<: *default
-  database: lms_gelo_production
-  username: lms_gelo
-  password: <%= ENV['LMS_GELO_DATABASE_PASSWORD'] %>
+  host: sql298.main-hosting.eu
+  database: u475013830_remote_db
+  username: u475013830_sef
+  password: <%= ENV['BCR_REMOTE_DATABASE_PASSWORD'] %>

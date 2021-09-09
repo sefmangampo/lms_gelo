@@ -16,7 +16,6 @@ import DataSource from "devextreme/data/data_source";
 
 import { getCutOffs, getPaymentModes } from "../../data/";
 import { onToolbarPreparing } from "./Helpers";
-import { start } from "turbolinks";
 
 const dataSource = new DataSource({
   key: "id",
@@ -77,20 +76,6 @@ export default function CutOffsGrid() {
   useEffect(() => {
     paymentModes();
   }, []);
-
-  const onEditorPreparing = (e) => {
-    if (e.parentType == "dataRow") {
-      if (e.dataField == "paymentmodeid") {
-        e.editorOptions.dataSource = new DataSource({
-          store: pModes,
-          key: "id",
-        });
-        e.editorOptions.onValueChanged = ({ value }) => {
-          e.row.data.paymentmodeid = value;
-        };
-      }
-    }
-  };
 
   const startDateValidation = ({ data, value, rule }) => {
     if (data.enddate) {

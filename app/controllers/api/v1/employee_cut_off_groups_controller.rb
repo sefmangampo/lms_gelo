@@ -42,11 +42,11 @@ class Api::V1::EmployeeCutOffGroupsController < ApiController
 
   private 
 
-  def cut_params
+  def set_cutgroup
     @cutgroup = EmployeeCutOffGroup.find(params[:id])
   end
 
-  def campaign_params
+  def cut_params
     params.permit(:id, :name , :paymodeid, :cutoffid, :year,:active)
   end
 end

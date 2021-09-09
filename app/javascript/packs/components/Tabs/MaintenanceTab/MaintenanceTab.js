@@ -9,6 +9,7 @@ import {
   AccrualTypesGrid,
   PositionsGrid,
   CampaignGrid,
+  CutffOffGroupGrid,
 } from "../../Grids";
 import { MaintanceMenu } from "../../SideMenu";
 
@@ -31,6 +32,7 @@ export default function MaintenanceTab() {
         {selectedItem === 5 && <AccrualTypesGrid />}
         {selectedItem === 6 && <CampaignGrid />}
         {selectedItem === 7 && <PositionsGrid />}
+        {selectedItem === 8 && <CutffOffGroupGrid />}
       </div>
     </div>
   );

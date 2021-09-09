@@ -13,6 +13,8 @@ import PositionsGrid from "./PositionsGrid";
 import CampaignGrid from "./CampaignGrid";
 import AdjustmentsGrid from "./AdjustmentsGrid";
 import UndertimeGrid from "./UndertimeGrid";
+import CutffOffGroupGrid from "./CutffOffGroupGrid";
+import CutOffGroupMembersGrid from "./CutOffGroupMembersGrid";
 
 export {
   EmployeeMasterGrid,
@@ -30,4 +32,6 @@ export {
   CampaignGrid,
   AdjustmentsGrid,
   UndertimeGrid,
+  CutffOffGroupGrid,
+  CutOffGroupMembersGrid,
 };
