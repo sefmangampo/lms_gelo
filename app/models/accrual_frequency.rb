@@ -1,0 +1,2 @@
+class AccrualFrequency < ApplicationRecord
+end

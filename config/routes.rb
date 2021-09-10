@@ -1,5 +1,20 @@
 Rails.application.routes.draw do
 
+  namespace :api do
+    namespace :v1 do
+      get 'paygroups/index'
+    end
+  end
+  namespace :api do
+    namespace :v1 do
+      get 'accrual_frequency/index'
+    end
+  end
+  namespace :api do
+    namespace :v1 do
+      get 'sex/index'
+    end
+  end
   devise_for :users
 
   namespace :api do 

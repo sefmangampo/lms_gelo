@@ -9,6 +9,7 @@ class CreateLeaves < ActiveRecord::Migration[6.1]
       t.integer :quantity
       t.integer :status
       t.integer :year
+      t.string :remarks
 
       t.timestamps
     end

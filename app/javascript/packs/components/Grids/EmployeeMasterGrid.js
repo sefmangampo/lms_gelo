@@ -10,6 +10,8 @@ import DataGrid, {
   StateStoring,
   FilterRow,
   Paging,
+  Pager,
+  Scrolling,
   FilterPanel,
   FormItem,
   ColumnChooser,
@@ -32,23 +34,21 @@ const dataSource = new DataSource({
 });
 
 export default function EmployeeMasterGrid() {
-
   const [positionsLU, setPositionsLU] = useState();
   const [campaignsLU, setCampaignsLU] = useState();
   const [managersLU, setManagersLU] = useState();
-  const [activeManagersLU, setActiveManagersLU] = useState()
-
+  const [activeManagersLU, setActiveManagersLU] = useState();
 
   const setToolbar = (e) => {
     onToolbarPreparing(e, "Employees");
   };
 
   const initemployees = async () => {
-    const d = await getEmployeeFullName()
+    const d = await getEmployeeFullName();
     setManagersLU(d);
-    const a = await getEmployeeFullName(true)
+    const a = await getEmployeeFullName(true);
     setActiveManagersLU(a);
-  }
+  };
 
   useEffect(() => {
     getActiveStore(getPositions, setPositionsLU);
@@ -60,14 +60,14 @@ export default function EmployeeMasterGrid() {
     e.data.active = true;
   };
 
-  const displayFullName = rowData => {
-    return `${rowData.lastname}, ${rowData.firstname} ${rowData.middlename}`
-  }
+  const displayFullName = (rowData) => {
+    return `${rowData.lastname}, ${rowData.firstname} ${rowData.middlename}`;
+  };
 
   const onEditorPreparing = (e) => {
     setActiveLookUp(e, "positionid", positionsLU);
     setActiveLookUp(e, "campaignid", campaignsLU);
-    setActiveLookUp(e, 'managerid', activeManagersLU)
+    setActiveLookUp(e, "managerid", activeManagersLU);
   };
 
   return (
@@ -75,12 +75,14 @@ export default function EmployeeMasterGrid() {
       <DataGrid
         onToolbarPreparing={setToolbar}
         dataSource={dataSource}
+        onEditorPreparing={onEditorPreparing}
+        onInitNewRow={onInitNewRow}
+
+        width={"auto"}
         showBorders={true}
         allowColumnResizing={true}
         allowColumnReordering={true}
         showRowLines={true}
-        onEditorPreparing={onEditorPreparing}
-        onInitNewRow={onInitNewRow}
         rowAlternationEnabled={true}
       >
         <Editing
@@ -91,21 +93,34 @@ export default function EmployeeMasterGrid() {
         />
         <FilterPanel visible={true} />
         <FilterRow visible={true} />
-        <Paging pageSize={10} />
+        <Paging pageSize={20} />
         <StateStoring enabled={true} type="localStorage" storageKey="storage" />
-        <Column dataField="lastname" caption="Last Name" visible={true} >
+        <Export enabled={true} allowExportSelectedData={true} />
+        <ColumnChooser enabled={true} mode="select" />
+        <Selection mode="multiple" />
+
+        <Pager showPageSizeSelector={true} showNavigationButtons={true} displayMode='compact' />
+        <Scrolling preloadEnabled={true} rowRenderingMode={true} showScrollbar='always'
+        />
+
+        <Column dataField="lastname" caption="Last Name" visible={true}>
           <RequiredRule />
         </Column>
-        <Column dataField="firstname" caption="First Name" visible={false} >
+        <Column dataField="firstname" caption="First Name" visible={false}>
           <RequiredRule />
         </Column>
         <Column dataField="middlename" caption="Middle Name" visible={false} />
-        <Column calculateCellValue={displayFullName} caption="Full Name">
+        <Column calculateCellValue={displayFullName} caption="Full Name" >
           <FormItem visible={false} />
         </Column>
-        <Column dataField="datehired" caption="Date Hired" dataType="date" >
+        <Column dataField="datehired" caption="Date Hired" dataType="date">
           <RequiredRule />
         </Column>
+        <Column
+          dataField="dateanniversary"
+          caption="Anniversary Date"
+          dataType="date"
+        />
         <Column
           dataField="dateregular"
           caption="Date Regular"
@@ -135,10 +150,10 @@ export default function EmployeeMasterGrid() {
             dataSource={managersLU}
           />
         </Column>
+        <Column dataField="paygroupid" dataType="number" caption="Pay Group" />
+        <Column dataField="sex" dataType="number" caption="Sex" />
         <Column dataField="active" dataType="boolean" caption="Active" />
-        <Export enabled={true} allowExportSelectedData={true} />
-        <ColumnChooser enabled={true} mode="select" />
-        <Selection mode="multiple" />
+        <Column dataField="remarks" dataType="string" caption="Remarks" />
       </DataGrid>
     </div>
   );

@@ -3,7 +3,7 @@ class CreatePaymentModes < ActiveRecord::Migration[6.1]
     create_table :payment_modes do |t|
       t.string :name
       t.boolean :active
-      t.boolean :useincutoffs
+      t.boolean :internal
       t.timestamps
     end
   end

@@ -7,9 +7,17 @@ class CreateEmployees < ActiveRecord::Migration[6.1]
       t.integer :managerid
       t.integer :positionid
       t.integer :campaignid
+      t.string :address
+      t.integer :paygroupid
+      t.boolean :sexid
+      t.date :dateofbirth
+      t.date :dateanniverysary
+      t.string :contactnumber
       t.date :datehired
       t.date :dateregular
       t.boolean :active
+      t.string :remarks
+      t.string :fullname
 
       t.timestamps
     end

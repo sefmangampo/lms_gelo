@@ -4,6 +4,7 @@ class CreateLeaveTypes < ActiveRecord::Migration[6.1]
       t.string :name
       t.boolean :ispaid
       t.boolean :active
+      t.string :description
       
 
       t.timestamps

@@ -152,7 +152,7 @@ export default function UndertimeGrid() {
           <RequiredRule />
         </Column>
         <Column
-          dataField="from"
+          dataField="fromhours"
           caption="From"
           dataType="datetime"
           setCellValue={setFromCellValue}
@@ -162,7 +162,7 @@ export default function UndertimeGrid() {
         </Column>
 
         <Column
-          dataField="to"
+          dataField="tohours"
           caption="To"
           dataType="datetime"
           setCellValue={setToCellValue}
@@ -171,11 +171,13 @@ export default function UndertimeGrid() {
           <RequiredRule />
         </Column>
         <Column
-          dataField="hours"
+          name="hours"
           caption="Hours"
           dataType="number"
           allowEditing={false}
         />
+        <Column dataField="year" caption="Year" dataType="number" />
+        <Column dataField="remarks" caption="Remarks" dataType="string" />
         <Column dataField="cutoffid" caption="CutOff" dataType="number">
           <Lookup
             valueExpr="id"

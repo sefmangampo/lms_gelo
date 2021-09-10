@@ -4,7 +4,6 @@ class CreateLeaveAccrualQueues < ActiveRecord::Migration[6.1]
       t.integer :employeeid
       t.date :dateeffective
       t.float :valuetoadd
-      t.integer :leavetypeid
       t.integer :year
       t.boolean :posted
       t.integer :accrualtypeid

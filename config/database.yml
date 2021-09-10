@@ -19,7 +19,7 @@ default: &default
 
 development:
   <<: *default
-  database: lms_gelo_development
+  database: lms_gelo_prod
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -50,7 +50,11 @@ test:
 #
 production:
   <<: *default
-  host: sql298.main-hosting.eu
-  database: u475013830_remote_db
-  username: u475013830_sef
-  password: <%= ENV['BCR_REMOTE_DATABASE_PASSWORD'] %>
+  database: lms_gelo_prod
+ # username: root
+ # password: 
+ # host: localhost
+  #host: sql298.main-hosting.eu
+  #database: u475013830_remote_db
+  #username: u475013830_sef
+  #password: <%= ENV['BCR_REMOTE_DATABASE_PASSWORD'] %>

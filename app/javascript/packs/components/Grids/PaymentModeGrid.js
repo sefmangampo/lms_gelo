@@ -38,11 +38,6 @@ export default function PaymentModeGrid() {
           mode="form"
         />
         <Column dataField="name" caption="Name" dataType="string" />
-        <Column
-          dataField="useincutoffs"
-          caption="Use in Cut-Offs"
-          dataType="boolean"
-        />
         <Column dataField="active" caption="Active" dataType="boolean" />
         <Export enabled={true} />
       </DataGrid>

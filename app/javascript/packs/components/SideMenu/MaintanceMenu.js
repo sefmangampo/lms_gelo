@@ -37,7 +37,15 @@ const items = [
   },
   {
     id: "9",
-    text: "Payment Mode Groups",
+    text: "Sex",
+  },
+  {
+    id: "10",
+    text: "Accrual Frequency",
+  },
+  {
+    id: "11",
+    text: "PayGroups",
   },
 ];
 

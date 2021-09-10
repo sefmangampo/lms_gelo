@@ -293,6 +293,7 @@ export default function EmployeeLeavesGrid() {
         >
           <FormItem visible={false} />
         </Column>
+        <Column dataField="remarks" caption="Remarks" dataType="string" />
         <Summary>
           <TotalItem column="employeeid" summaryType="count" />
         </Summary>

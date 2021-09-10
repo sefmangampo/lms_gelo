@@ -36,6 +36,7 @@ export default function AccrualTypesGrid() {
           mode="form"
         />
         <Column dataField="name" caption="Name" dataType="string" />
+        <Column dataField="frequencyid" caption="Frequency" dataType="number" />
         <Column dataField="active" caption="Active" dataType="boolean" />
         <Export enabled={true} />
       </DataGrid>

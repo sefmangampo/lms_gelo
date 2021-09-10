@@ -57,6 +57,6 @@ class Api::V1::EmployeesController < ApiController
         end
 
         def employee_params
-            params.permit(:id, :employee, :lastname, :firstname, :middlename, :datehired, :dateregular, :active, :positionid, :managerid, :campaignid)
+            params.permit(:id, :employee, :lastname, :firstname, :middlename, :address, :paygroupid, :sexid, :dateofbirth, :dateanniversary, :contactnumber, :remarks, :fullname, :datehired, :dateregular, :active, :positionid, :managerid, :campaignid)
         end
 end
