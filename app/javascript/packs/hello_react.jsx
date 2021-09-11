@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 
 import "devextreme/dist/css/dx.material.teal.dark.compact.css";
 
-import Home from "./components/Home";
+import Home from "../components/Home";
 
 const Hello = (props) => (
   <div>

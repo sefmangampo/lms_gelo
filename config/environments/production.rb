@@ -77,7 +77,7 @@ Rails.application.configure do
 
   # Log disallowed deprecations.
   config.active_support.disallowed_deprecation = :log
-
+  config.public_file_server.enabled = true
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
