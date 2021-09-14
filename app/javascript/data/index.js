@@ -4,6 +4,8 @@ import {
   processAccrualQueue,
   generateIndividualAccruals,
   loadEmployeesToGroups,
+  generateAccrualSettings,
+  createMultipleLeavees,
 } from "./CustomEndpoints";
 
 const getEmployees = getStore("employees");
@@ -23,6 +25,11 @@ const getUnderTimes = getStore("undertime");
 const getAdjustments = getStore("accrual_adjustments");
 const getCutOffGroups = getStore("employee_cut_off_groups");
 const getCutOffGroupMembers = getStore("employee_cut_off_group_members");
+const getSexes = getStore("sex");
+const getPayGroups = getStore("paygroups");
+const getAccrualFrequency = getStore("accrual_frequency");
+const getStatus = getStore("status");
+const getEmploymentStatus = getStore("employment_status");
 
 const getActiveStore = async (store, setter, directSub = false, id = "id") => {
   const data = directSub ? data : await store.load();
@@ -93,4 +100,11 @@ export {
   getCutOffGroupMembers,
   getCutOffGroups,
   loadEmployeesToGroups,
+  getSexes,
+  getAccrualFrequency,
+  getPayGroups,
+  getStatus,
+  getEmploymentStatus,
+  generateAccrualSettings,
+  createMultipleLeavees,
 };

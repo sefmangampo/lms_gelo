@@ -1,32 +1,23 @@
 Rails.application.routes.draw do
 
-  namespace :api do
-    namespace :v1 do
-      get 'paygroups/index'
-    end
-  end
-  namespace :api do
-    namespace :v1 do
-      get 'accrual_frequency/index'
-    end
-  end
-  namespace :api do
-    namespace :v1 do
-      get 'sex/index'
-    end
-  end
   devise_for :users
 
   namespace :api do 
     namespace :v1 do
 
+        post 'import_leave_buffer', to: 'import_leave_buffer#multiple_insert'
+        post 'process_accrual_settings', to: 'leave_accrual_settings#process_queue_to_settings'
         post 'process_accrual_queue', to: 'leave_accrual_queue#process_queue'
         post 'generate_accruals', to: 'leave_accrual_queue#generate_accruals'
         post 'generate_individual_accruals', to: 'leave_accrual_queue#generate_individual_accruals'
         post 'load_employees_to_cut_off_groups', to: 'employee_cut_off_group_members#load_employees_to_cut_off_groups'
 
-        
-        
+        post  'campaign_multiple_insert', to: 'campaign#multiple_insert'
+        post  'position_multiple_insert', to: 'position#multiple_insert'
+        post  'employee_status_multiple_insert', to: 'status#multiple_insert'
+        post  'employment_status_multiple_insert', to: 'employment_status#multiple_insert'
+        post  'employees_multiple_insert', to: 'employees#multiple_insert'
+ 
         get 'employees', to: 'employees#index'
         get 'employees/:id', to: 'employees#show'
         post 'employees', to: 'employees#create'
@@ -117,17 +108,36 @@ Rails.application.routes.draw do
         delete 'accrual_adjustments/:id', to: 'accrual_adjustments#destroy'
         patch 'accrual_adjustments/:id', to: 'accrual_adjustments#update'
 
-        get 'employee_cut_off_groups', to: 'employee_cut_off_groups#index'
-        get 'employee_cut_off_groups/:id', to: 'employee_cut_off_groups#show'
-        post 'employee_cut_off_groups', to: 'employee_cut_off_groups#create'
-        delete 'employee_cut_off_groups/:id', to: 'employee_cut_off_groups#destroy'
-        patch 'employee_cut_off_groups/:id', to: 'employee_cut_off_groups#update'
+        get 'accrual_frequency', to: 'accrual_frequency#index'
+        get 'accrual_frequency/:id', to: 'accrual_frequency#show'
+        post 'accrual_frequency', to: 'accrual_frequency#create'
+        delete 'accrual_frequency/:id', to: 'accrual_frequency#destroy'
+        patch 'accrual_frequency/:id', to: 'accrual_frequency#update'
 
-        get 'employee_cut_off_group_members', to: 'employee_cut_off_group_members#index'
-        get 'employee_cut_off_group_members/:id', to: 'employee_cut_off_group_members#show'
-        post 'employee_cut_off_group_members', to: 'employee_cut_off_group_members#create'
-        delete 'employee_cut_off_group_members/:id', to: 'employee_cut_off_group_members#destroy'
-        patch 'employee_cut_off_group_members/:id', to: 'employee_cut_off_group_members#update'
+        get 'sex', to: 'sex#index'
+        get 'sex/:id', to: 'sex#show'
+        post 'sex', to: 'sex#create'
+        delete 'sex/:id', to: 'sex#destroy'
+        patch 'sex/:id', to: 'sex#update'
+
+        get 'paygroups', to: 'employee_cut_off_groups#index'
+        get 'paygroups/:id', to: 'employee_cut_off_groups#show'
+        post 'paygroups', to: 'employee_cut_off_groups#create'
+        delete 'paygroups/:id', to: 'employee_cut_off_groups#destroy'
+        patch 'paygroups/:id', to: 'employee_cut_off_groups#update'
+
+        get 'status', to: 'status#index'
+        get 'status/:id', to: 'status#show'
+        post 'status', to: 'status#create'
+        delete 'status/:id', to: 'status#destroy'
+        patch 'status/:id', to: 'status#update'
+
+        get 'employment_status', to: 'employment_status#index'
+        get 'employment_status/:id', to: 'employment_status#show'
+        post 'employment_status', to: 'employment_status#create'
+        delete 'employment_status/:id', to: 'employment_status#destroy'
+        patch 'employment_status/:id', to: 'employment_status#update'
+
     end
   end
 

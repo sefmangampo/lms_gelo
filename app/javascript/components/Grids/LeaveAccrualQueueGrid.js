@@ -10,6 +10,9 @@ import DataGrid, {
   Editing,
   Summary,
   TotalItem,
+  Pager,
+  Paging,
+  StateStoring,
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
@@ -18,7 +21,6 @@ import notify from "devextreme/ui/notify";
 import {
   getLeaveAccrualQueue,
   getEmployees,
-  getLeaveTypes,
   getActiveStore,
   getLeaveAccrualTypes,
   processAccrualQueue,
@@ -33,7 +35,7 @@ const dataSource = new DataSource({
 
 export default function LeaveAccrualQueueGrid() {
   const [employees, setEmployees] = useState(null);
-  const [leaveTypes, setLeaveTypes] = useState(null);
+
   const [accrualTypes, setAccrualTypes] = useState(null);
 
   const setToolbar = (e) => {
@@ -46,8 +48,6 @@ export default function LeaveAccrualQueueGrid() {
           text: "Process Accruals",
           onClick: async () => {
             const res = await processAccrualQueue();
-
-            console.log("rest");
 
             if (res) {
               const number = res.Result;
@@ -85,7 +85,6 @@ export default function LeaveAccrualQueueGrid() {
   useEffect(() => {
     initEmployees();
     getActiveStore(getLeaveAccrualTypes, setAccrualTypes);
-    getActiveStore(getLeaveTypes, setLeaveTypes);
   }, []);
 
   const EmployeeLUDs = {
@@ -125,6 +124,11 @@ export default function LeaveAccrualQueueGrid() {
         onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
       >
+        <StateStoring
+          enabled={true}
+          type="localStorage"
+          storageKey="lms_queue"
+        />
         <Editing allowDeleting={true} />
         <Column
           name="code"
@@ -138,14 +142,6 @@ export default function LeaveAccrualQueueGrid() {
             allowClearing={true}
             displayExpr="name"
             dataSource={EmployeeLUDs}
-          />
-        </Column>
-        <Column dataField="leavetypeid" caption="Leave Type" dataType="number">
-          <Lookup
-            valueExpr="id"
-            allowClearing={true}
-            displayExpr="name"
-            dataSource={leaveTypes}
           />
         </Column>
         <Column
@@ -176,6 +172,13 @@ export default function LeaveAccrualQueueGrid() {
           dataField="valuetoadd"
           caption="Value to Add"
           dataType="number"
+        />
+        <Paging defaultPageSize={8} />
+        <Pager
+          visible={true}
+          displayMode="full"
+          showInfo={true}
+          showPageSizeSelector={true}
         />
         <Column dataField="year" caption="Year" width={75} dataType="number" />
         <Export enabled={true} allowExportSelectedData={true} />

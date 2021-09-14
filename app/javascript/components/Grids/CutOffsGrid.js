@@ -14,8 +14,8 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
-import { getCutOffs, getPaymentModes } from "../../data/";
-import { onToolbarPreparing } from "./Helpers";
+import { getCutOffs, getPaymentModes, getActiveStore } from "../../data/";
+import { onToolbarPreparing, setActiveLookUp } from "./Helpers";
 
 const dataSource = new DataSource({
   key: "id",
@@ -24,7 +24,6 @@ const dataSource = new DataSource({
 
 export default function CutOffsGrid() {
   const [pModes, setPModes] = useState(null);
-  const [pmLu, setPmLu] = useState(null);
 
   const datagridRef = useRef(null);
 
@@ -34,14 +33,16 @@ export default function CutOffsGrid() {
         location: "after",
         widget: "dxSelectBox",
         options: {
-          dataSource: pmLu,
+          dataSource: pModes,
           displayExpr: "name",
+          showClearButton: true,
+
           valueExpr: "id",
           value: 0,
           onValueChanged: ({ value }) => {
             const grid = datagridRef.current.instance;
 
-            if (value === 0) {
+            if (value === null) {
               grid.clearFilter();
             } else {
               grid.filter(["paymentmodeid", "=", value]);
@@ -54,15 +55,9 @@ export default function CutOffsGrid() {
     onToolbarPreparing(e, "Cut Offs", filterSelectBox);
   };
 
-  const paymentModes = async () => {
-    const data = await getPaymentModes.load();
-    const modes = data.filter((item) => item.active && item.useincutoffs);
-    setPModes(modes);
-
-    const newModes = [{ id: 0, name: "All" }, ...modes];
-
-    setPmLu(newModes);
-  };
+  function customizePercentageText({ valueText }) {
+    return `${valueText}%`;
+  }
 
   const onInitNewRow = (e) => {
     const today = new Date();
@@ -74,7 +69,7 @@ export default function CutOffsGrid() {
   };
 
   useEffect(() => {
-    paymentModes();
+    getActiveStore(getPaymentModes, setPModes);
   }, []);
 
   const startDateValidation = ({ data, value, rule }) => {
@@ -95,14 +90,6 @@ export default function CutOffsGrid() {
       }
     }
     return true;
-  };
-
-  const LUdataSource = {
-    store: {
-      data: pModes,
-      type: "array",
-    },
-    key: "id",
   };
 
   const dataEditorOptions = {
@@ -132,6 +119,10 @@ export default function CutOffsGrid() {
     );
   };
 
+  const onEditorPreparing = (e) => {
+    setActiveLookUp(e, "paymentmodeid", pModes);
+  };
+
   return (
     <div>
       <DataGrid
@@ -143,6 +134,7 @@ export default function CutOffsGrid() {
         allowColumnReordering={true}
         allowColumnResizing={true}
         rowAlternationEnabled={true}
+        onEditorPreparing={onEditorPreparing}
         onToolbarPreparing={setToolbar}
       >
         <Editing
@@ -169,7 +161,11 @@ export default function CutOffsGrid() {
           caption="Type"
           setCellValue={setPayMode}
         >
-          <Lookup valueExpr="id" displayExpr="name" dataSource={LUdataSource} />
+          <Lookup
+            valueExpr="id"
+            displayExpr="name"
+            dataSource={getPaymentModes}
+          />
         </Column>
         <Column
           dataField="startdate"

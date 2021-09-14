@@ -1,0 +1,2 @@
+class ImportLeaveBuffer < ApplicationRecord
+end

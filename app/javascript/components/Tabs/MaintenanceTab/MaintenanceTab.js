@@ -9,7 +9,15 @@ import {
   AccrualTypesGrid,
   PositionsGrid,
   CampaignGrid,
+  SexGrid,
+  AccrualFrequenciesGrid,
+  PayGroupsGrid,
+  EmployeeStatusGrid,
+  EmploymentStatusGrid,
 } from "../../Grids";
+
+import { UploadExcelLayout } from "../../Layouts";
+
 import { MaintanceMenu } from "../../SideMenu";
 
 import css from "./Maintenance.module.scss";
@@ -31,6 +39,12 @@ export default function MaintenanceTab() {
         {selectedItem === 5 && <AccrualTypesGrid />}
         {selectedItem === 6 && <CampaignGrid />}
         {selectedItem === 7 && <PositionsGrid />}
+        {selectedItem === 8 && <SexGrid />}
+        {selectedItem === 9 && <AccrualFrequenciesGrid />}
+        {selectedItem === 10 && <PayGroupsGrid />}
+        {selectedItem === 11 && <EmployeeStatusGrid />}
+        {selectedItem === 12 && <EmploymentStatusGrid />}
+        {selectedItem === 13 && <UploadExcelLayout />}
       </div>
     </div>
   );

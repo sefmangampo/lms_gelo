@@ -121,3 +121,176 @@
 #         internal: true
 #     }
 # ])
+
+# Campaign.create([
+#     {
+#         name: 'Bacolod',
+#         active: true
+#     },
+#     {
+#         name: 'Batangas',
+#         active: true
+#     },
+#     {
+#         name: 'Bicol',
+#         active: true
+#     },
+#     {
+#         name: 'CDO',
+#         active: true
+#     },
+#     {
+#         name: 'Cebu',
+#         active: true
+#     },
+#     {
+#         name: 'Davao',
+#         active: true
+#     },
+#     {
+#         name: 'Gilmore',
+#         active: true
+#     },
+#     {
+#         name: 'Iloilo',
+#         active: true
+#     },
+#     {
+#         name: 'Main Office',
+#         active: true
+#     },
+#     {
+#         name: 'Palawan',
+#         active: true
+#     }, 
+#     {
+#         name: 'Tarlac',
+#         active: true
+#     }
+# # ])
+
+# jobststis.create([
+#     {
+#         name: 'Independent Contractor',
+#         active: true
+#     },
+#     {
+#         name: 'Probationary',
+#         active: true
+#     },
+#     {
+#         name: 'Project Based',
+#         active: true
+#     },
+#     {
+#         name: 'Regular',
+#         active: true
+#     }
+# ])
+
+# Position.create([
+#     {
+#        name: 'Account Associate',
+#        active: true 
+#     },
+#     {
+#         name: 'Accounting Assistant',
+#         active: true 
+#      },
+#      {
+#         name: 'Accounting Officer',
+#         active: true 
+#      },
+#      {
+#         name: 'Admin Callouts Buffer',
+#         active: true 
+#      },
+#      {
+#         name: 'Admin Staff',
+#         active: true 
+#      },
+#      {
+#         name: 'Admin Team Leader',
+#         active: true 
+#      },
+#      {
+#         name: 'Assistant Admin',
+#         active: true 
+#      },
+#      {
+#         name: 'Assistant Junior Analyst',
+#         active: true 
+#      },
+#      {
+#         name: 'Assistant Manager',
+#         active: true 
+#      },
+#      {
+#         name: 'Asst. Team Leader',
+#         active: true 
+#      },
+#      {
+#         name: 'Asst. Team Manager',
+#         active: true 
+#      },
+#      {
+#         name: 'Autoloan Driver',
+#         active: true 
+#      },
+#      {
+#         name: 'Account Rider',
+#         active: true 
+#      },
+#      {
+#         name: 'Branch Manager',
+#         active: true 
+#      },
+#      {
+#         name: 'Callouts Buffer',
+#         active: true 
+#      },
+#      {
+#         name: 'Consumer JA Buffer',
+#         active: true 
+#      },
+#      {
+#         name: 'Consumer Junior Analyst',
+#         active: true 
+#      },
+#      {
+#         name: 'Corporate Affairs & Communications Manager',
+#         active: true 
+#      },
+#      {
+#         name: 'Credit Associate',
+#         active: true 
+#      },
+#      {
+#         name: 'EG PMR',
+#         active: true 
+#      },
+#      {
+#         name: 'EG PMR GOA',
+#         active: true 
+#      },
+#      {
+#         name: 'Electrical Maintenance',
+#         active: true 
+#      },
+#      {
+#         name: 'Exclusive Driver',
+#         active: true 
+#      },
+#      {
+#         name: 'Field Admin',
+#         active: true 
+#      },
+#      {
+#         name: 'Field Credit Investigator',
+#         active: true 
+#      },
+#      {
+#         name: 'Account Associate',
+#         active: true 
+#      },
+# ])

@@ -4,7 +4,7 @@ import DataGrid, { Column, Editing, Export } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
 import { getPaymentModes } from "../../data/";
-import { onToolbarPreparing } from "./Helpers";
+import { onToolbarPreparing, disableRowEditing } from "./Helpers";
 
 const dataSource = new DataSource({
   key: "id",
@@ -21,6 +21,10 @@ export default function PaymentModeGrid() {
     e.data.useincutoffs = true;
   };
 
+  const onCellPrepared = (e) => {
+    disableRowEditing(e);
+  };
+
   return (
     <div>
       <DataGrid
@@ -28,6 +32,7 @@ export default function PaymentModeGrid() {
         dataSource={dataSource}
         showBorders={true}
         showRowLines={true}
+        onCellPrepared={onCellPrepared}
         onInitNewRow={onInitNewRow}
         rowAlternationEnabled={true}
       >

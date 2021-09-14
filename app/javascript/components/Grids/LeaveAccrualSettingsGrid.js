@@ -26,6 +26,7 @@ import {
   getActiveStore,
   generateAccruals,
   generateIndividualAccruals,
+  generateAccrualSettings,
 } from "../../data/";
 
 import {
@@ -45,6 +46,20 @@ export default function LeaveAccrualSettingsGrid() {
 
   const setToolbar = (e) => {
     const processButton = [
+      {
+        location: "after",
+        widget: "dxButton",
+        options: {
+          icon: "refresh",
+          text: "Load employees",
+          onClick: async () => {
+            const res2 = await generateAccrualSettings();
+            const mes = `Records processed.`;
+            notify(mes, "info", 3000);
+            e.component.refresh();
+          },
+        },
+      },
       {
         location: "after",
         widget: "dxButton",
@@ -133,7 +148,11 @@ export default function LeaveAccrualSettingsGrid() {
         <FilterPanel visible={true} />
         <FilterRow visible={true} />
         <Paging pageSize={10} />
-        <StateStoring enabled={true} type="localStorage" storageKey="storage" />
+        <StateStoring
+          enabled={true}
+          type="localStorage"
+          storageKey="lms_settings"
+        />
         <Column
           name="code"
           width={100}
@@ -150,23 +169,24 @@ export default function LeaveAccrualSettingsGrid() {
             dataSource={EmployeeLUDs}
           />
         </Column>
-        <Column dataField="leavetypeid" caption="Leave Type" dataType="number">
-          <Lookup
-            valueExpr="id"
-            allowClearing={true}
-            displayExpr="name"
-            dataSource={getLeaveTypes}
-          />
-        </Column>
+        <Column
+          dataField="dateeffective"
+          caption="Date Effective"
+          dataType="date"
+        />
         <Column dataField="year" caption="Year" dataType="number" />
         <Column dataField="rate" caption="Rate" dataType="number" />
-        <Column dataField="isregular" caption="Regular" dataType="boolean" />
         <Column
           dataField="isyearly"
           caption="Credited Per Year"
           dataType="boolean"
         />
-        <Column dataField="active" caption="Active" dataType="boolean" />
+        <Column
+          dataField="active"
+          caption="Active"
+          dataType="boolean"
+          visible={false}
+        />
         <Export enabled={true} allowExportSelectedData={true} />
         <Selection mode="multiple" />
         <Editing allowDeleting={true} />

@@ -10,7 +10,7 @@ import "devextreme/dist/css/dx.material.teal.dark.compact.css";
 
 import Home from "../components/Home";
 
-const Hello = (props) => (
+const Hello = () => (
   <div>
     <Home />
   </div>

@@ -102,7 +102,11 @@ export default function LeaveAccrualsGrid() {
         <FilterRow visible={true} />
         <Editing allowDeleting={true} />
         <Paging pageSize={10} />
-        <StateStoring enabled={true} type="localStorage" storageKey="storage" />
+        <StateStoring
+          enabled={true}
+          type="localStorage"
+          storageKey="lms_accruals"
+        />
         <ColumnChooser enabled={true} mode="select" />
         <Column dataField="employeeid" caption="Employee" dataType="number">
           <Lookup

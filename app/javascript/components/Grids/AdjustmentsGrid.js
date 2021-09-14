@@ -87,7 +87,11 @@ export default function AdjustmentsGrid() {
         <FilterPanel visible={true} />
         <FilterRow visible={true} />
         <Paging pageSize={10} />
-        <StateStoring enabled={true} type="localStorage" storageKey="storage" />
+        <StateStoring
+          enabled={true}
+          type="localStorage"
+          storageKey="lms_adjustments"
+        />
         <Column dataField="employeeid" caption="Employee" dataType="number">
           <Lookup
             valueExpr="id"

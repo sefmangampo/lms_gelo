@@ -43,7 +43,7 @@ class Api::V1::CutOffController < ApiController
     end
 
     def cut_off_params
-      params.permit(:id, :name,:paymentmodetype, :startdate, :enddate, :active)
+      params.permit(:id, :name,:paymentmodeid, :year, :cut_off, :startdate, :enddate, :active)
     end
 
 end

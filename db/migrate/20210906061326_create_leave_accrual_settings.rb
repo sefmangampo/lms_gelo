@@ -7,7 +7,7 @@ class CreateLeaveAccrualSettings < ActiveRecord::Migration[6.1]
       t.integer :year
       t.boolean :isyearly
       t.boolean :active
-      t.date :dateeffective
+      t.datetime :dateeffective
 
       t.timestamps
     end
