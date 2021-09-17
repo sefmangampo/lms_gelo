@@ -7,19 +7,11 @@ const items = [
     text: "Create Report",
     selected: true,
   },
-  {
-    id: 2,
-    text: "View Reports",
-  },
-  {
-    id: 3,
-    text: "Audit Trail",
-  },
 ];
 
 export default function ReportsMenu({ setSelectedItem }) {
-  const onItemClick = ({ itemIndex }) => {
-    setSelectedItem(itemIndex);
+  const onItemClick = ({ itemData }) => {
+    setSelectedItem(itemData.id);
   };
   return (
     <div>

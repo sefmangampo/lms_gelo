@@ -21,7 +21,7 @@ import { MaintanceMenu } from "../../SideMenu";
 import css from "./Maintenance.module.scss";
 
 export default function MaintenanceTab() {
-  const [selectedItem, setSelectedItem] = useState(0);
+  const [selectedItem, setSelectedItem] = useState(1);
 
   return (
     <div className={css.container}>
@@ -29,18 +29,18 @@ export default function MaintenanceTab() {
         <MaintanceMenu setSelectedItem={setSelectedItem} />
       </div>
       <div className={css.contentbar}>
-        {selectedItem === 0 && <EmployeeMasterGrid />}
-        {selectedItem === 1 && <CutOffsGrid />}
-        {selectedItem === 2 && <PaymentModeGrid />}
-        {selectedItem === 3 && <LeaveStatusGrid />}
-        {selectedItem === 4 && <LeaveTypesGrid />}
-        {selectedItem === 5 && <AccrualTypesGrid />}
-        {selectedItem === 6 && <CampaignGrid />}
-        {selectedItem === 7 && <PositionsGrid />}
-        {selectedItem === 8 && <SexGrid />}
-        {selectedItem === 9 && <EmployeeStatusGrid />}
-        {selectedItem === 10 && <EmploymentStatusGrid />}
-        {selectedItem === 11 && <UploadExcelLayout />}
+        {selectedItem === 1 && <EmployeeMasterGrid />}
+        {selectedItem === 2 && <CutOffsGrid />}
+        {selectedItem === 3 && <PaymentModeGrid />}
+        {selectedItem === 4 && <LeaveStatusGrid />}
+        {selectedItem === 5 && <LeaveTypesGrid />}
+        {selectedItem === 6 && <AccrualTypesGrid />}
+        {selectedItem === 7 && <CampaignGrid />}
+        {selectedItem === 8 && <PositionsGrid />}
+        {selectedItem === 9 && <SexGrid />}
+        {selectedItem === 10 && <EmployeeStatusGrid />}
+        {selectedItem === 11 && <EmploymentStatusGrid />}
+        {selectedItem === 12 && <UploadExcelLayout />}
       </div>
     </div>
   );

@@ -2,5 +2,12 @@ import MaintanceMenu from "./MaintanceMenu";
 import MonitoringMenu from "./MonitoringMenu";
 import DashboardMenu from "./DashboardMenu";
 import ReportsMenu from "./ReportsMenu";
+import SettingsMenu from "./SettingsMenu";
 
-export { MaintanceMenu, MonitoringMenu, DashboardMenu, ReportsMenu };
+export {
+  SettingsMenu,
+  MaintanceMenu,
+  MonitoringMenu,
+  DashboardMenu,
+  ReportsMenu,
+};

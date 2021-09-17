@@ -1,0 +1,3 @@
+"id";"email";"encrypted_password";"reset_password_token";"reset_password_sent_at";"remember_created_at";"created_at";"updated_at";"username"
+1;"admin@admin.com";"$2a$12$IebvAvsLxFBd9ZCivI9P2O0YtuaGQ/y5zBYtsJ1OYC/Rk52AVVEjG";"";"";"";"2021-09-10 10:05:25.377515";"2021-09-17 12:27:13.298862";"admin"
+2;"goodcatch18@gmail.com";"$2a$12$o3R/50fnkYNin/jPrJ5DaeDOmJesh8AGUGPOiIxlNTI8KYJRqv3li";"";"";"";"2021-09-17 14:00:30.178697";"2021-09-17 14:00:30.178697";"gelo"

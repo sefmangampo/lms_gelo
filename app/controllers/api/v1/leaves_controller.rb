@@ -1,7 +1,7 @@
 class Api::V1::LeavesController < ApiController
   def index
 
-    @leaves = Leafe.all
+    @leaves = Leafe.joins("INNER JOIN employees ON employees.id = leaves.employeeid WHERE employees.active = TRUE")
 
     render json: @leaves
 

@@ -26,7 +26,7 @@ class CreateEmployees < ActiveRecord::Migration[6.1]
       t.string :manager
       t.string :employeename
       t.string :suffix
-      t.booean :hassuffix
+      t.boolean :hassuffix
 
       t.timestamps
     end
