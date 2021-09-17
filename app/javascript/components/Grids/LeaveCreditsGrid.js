@@ -10,6 +10,8 @@ import DataGrid, {
   StateStoring,
   FilterRow,
   Summary,
+  FilterPanel,
+  Pager,
   TotalItem,
   Format,
 } from "devextreme-react/data-grid";
@@ -54,6 +56,7 @@ export default function LeaveCreditsGrid() {
               employee: el.employee,
               leavetype: el.leaveaccrualtype,
               total: 0,
+              leavetotal: 0,
               year: el.year,
             });
           }
@@ -77,6 +80,7 @@ export default function LeaveCreditsGrid() {
               employeeid: el.employeeid,
               employee: el.employee,
               leavetype: el.leaveaccrualtype,
+              leavetotal: 0,
               total: 0,
               year: el.year,
             });
@@ -108,6 +112,9 @@ export default function LeaveCreditsGrid() {
         const emp = masterList[y];
 
         if (emp.employeeid === d.employeeid && emp.year === d.year) {
+          if (d.isleave) {
+            emp.leavetotal = emp.leavetotal + 1;
+          }
           emp.total = emp.total + d.quantity;
         }
       }
@@ -145,6 +152,7 @@ export default function LeaveCreditsGrid() {
         element.quantity =
           element.isleave == 1 ? element.quantity * -1 : element.quantity;
       });
+
       setDb(newD);
     };
 
@@ -158,6 +166,8 @@ export default function LeaveCreditsGrid() {
         type: "array",
         data: db,
       },
+      pageSize: 20,
+      paginate: true,
     };
 
     const onRowPrepared = (e) => {
@@ -188,6 +198,7 @@ export default function LeaveCreditsGrid() {
           onRowPrepared={onRowPrepared}
         >
           <FilterRow visible={true} />
+          <FilterPanel visible={true} />
           <Paging pageSize={10} />
           <Selection mode="multiple" />
           <ColumnChooser enabled={true} mode="select" />
@@ -207,7 +218,6 @@ export default function LeaveCreditsGrid() {
             caption="Type"
             dataType="string"
           />
-          <Column dataField="period" caption="Cut-off" dataType="string" />
           <Summary>
             <TotalItem column="employee" summaryType="count" />
             <TotalItem column="quantity" summaryType="sum" />
@@ -228,8 +238,9 @@ export default function LeaveCreditsGrid() {
         onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
       >
+        <FilterPanel visible={true} />
         <FilterRow visible={true} />
-        <Paging pageSize={10} />
+        <Paging defaultPageSize={8} />
         <Selection mode="multiple" />
         <StateStoring
           enabled={true}
@@ -242,12 +253,23 @@ export default function LeaveCreditsGrid() {
           dataType="string"
         ></Column>
         <Column dataField="leavetype" caption="Type" dataType="string" />
+        <Column
+          dataField="leavetotal"
+          caption="Number of Leaves"
+          dataType="number"
+        />
         <Column dataField="total" caption="Credits" dataType="number">
           <Format type="fixedPoint" precision={2} />
         </Column>
         <Column dataField="year" caption="Year" dataType="number" />
         <Export enabled={true} allowExportSelectedData={true} />
-
+        <Pager
+          visible={true}
+          displayMode="compact"
+          showPageSizeSelector={true}
+          showInfo={true}
+          showNavigationButtons={true}
+        />
         <MasterDetail enabled={true} component={detailTemplate} />
         <Summary>
           <TotalItem column="employee" summaryType="count" />

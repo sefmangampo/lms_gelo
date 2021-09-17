@@ -9,6 +9,7 @@ import DataGrid, {
   Paging,
   Editing,
   FilterPanel,
+  Pager,
   FormItem,
   StateStoring,
   FilterRow,
@@ -25,7 +26,6 @@ import {
   getLeaveTypes,
   getActiveStore,
   generateAccruals,
-  generateIndividualAccruals,
   generateAccrualSettings,
 } from "../../data/";
 
@@ -67,11 +67,11 @@ export default function LeaveAccrualSettingsGrid() {
           icon: "refresh",
           text: "Process to Queue",
           onClick: async () => {
-            const res2 = await generateIndividualAccruals();
+            //  const res2 = await generateIndividualAccruals();
             const res = await generateAccruals();
 
             const mes = `Records processed.`;
-            notify(mes, "info", 3000);
+            notify(mes, "success", 3000);
             e.component.refresh();
           },
         },
@@ -102,6 +102,8 @@ export default function LeaveAccrualSettingsGrid() {
       type: "array",
     },
     key: "id",
+    pageSize: 20,
+    paginate: true,
   };
 
   const onInitNewRow = (e) => {
@@ -147,7 +149,13 @@ export default function LeaveAccrualSettingsGrid() {
       >
         <FilterPanel visible={true} />
         <FilterRow visible={true} />
-        <Paging pageSize={10} />
+        <Paging defaultPageSize={10} />
+        <Pager
+          visible={true}
+          displayMode="compact"
+          showInfo={true}
+          showPageSizeSelector={true}
+        />
         <StateStoring
           enabled={true}
           type="localStorage"

@@ -44,6 +44,6 @@ class Api::V1::LeaveTypesController < ApiController
   end
 
   def leaves_params
-    params.permit(:id, :name, :active, :ispaid, :description, :leave_type)
+    params.permit(:id, :name, :active, :code, :ispaid, :description, :leave_type)
   end
 end

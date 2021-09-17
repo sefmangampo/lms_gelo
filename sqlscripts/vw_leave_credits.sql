@@ -16,10 +16,9 @@ VIEW `vw_leave_credits` AS
         `t`.`date` AS `date`,
         `t`.`year` AS `year`,
         `t`.`type` AS `leaveaccrualtype`,
-        IFNULL(`c`.`name`, 'Unknown') AS `period`,
         `t`.`isleave` AS `isleave`
     FROM
-        (((SELECT 
+        ((SELECT 
             `la`.`id` AS `ID`,
                 `la`.`employeeid` AS `employeeid`,
                 'AC' AS `code`,
@@ -43,7 +42,18 @@ VIEW `vw_leave_credits` AS
             (`leaves` `l`
         JOIN `leave_types` `lt` ON ((`lt`.`id` = `l`.`leavetypeid`)))
         WHERE
-            ((`l`.`status` = 2) AND (`lt`.`id` = 1))) `t`
-        JOIN `employees` `e` ON ((`e`.`id` = `t`.`employeeid`)))
-        LEFT JOIN `cut_offs` `c` ON ((`t`.`date` BETWEEN `c`.`startdate` AND `c`.`enddate`)))
+            ((`l`.`status` = 2) AND (`lt`.`id` = 1)) UNION ALL SELECT 
+            `aa`.`id` AS `id`,
+                `aa`.`employeeid` AS `employeeid`,
+                'AD' AS `AD`,
+                `aa`.`rate` AS `rate`,
+                `aa`.`dateeffective` AS `dateeffective`,
+                `aa`.`year` AS `year`,
+                `ay`.`name` AS `name`,
+                0 AS `0`
+        FROM
+            (`accrual_adjustments` `aa`
+        LEFT JOIN `accrual_types` `ay` ON ((`ay`.`id` = 3)))) `t`
+        JOIN `employees` `e` ON (((`e`.`id` = `t`.`employeeid`)
+            AND (`e`.`active` = TRUE))))
     ORDER BY `t`.`date`

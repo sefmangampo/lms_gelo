@@ -22,13 +22,13 @@ DECLARE done BOOLEAN DEFAULT 0;
     CREATE TEMPORARY TABLE temp_table_generate_employee_accruals_monthly(id INT, date_regular DATE, employee_id INT, rate FLOAT, year INT);
 	
     INSERT INTO temp_table_generate_employee_accruals_monthly(id, date_regular, employee_id, rate, year)
-    SELECT las.id,  e.dateregular, las.employeeid, las.rate, las.year
+    SELECT las.id,  e.dateanniversary, las.employeeid, las.rate, las.year
 	FROM leave_accrual_settings las 
 		LEFT JOIN leave_accrual_queues laq ON laq.referenceid = las.id
 		INNER JOIN employees e ON e.id = las.employeeid
-		WHERE las.active = 1 AND las.isregular = 1 
+		WHERE las.active = 1 
 			AND las.year = yearTarget AND las.isyearly = 0
-		GROUP BY las.id, e.dateregular, las.employeeid, las.rate, las.year, las.isyearly;
+		GROUP BY las.id, e.dateanniversary, las.employeeid, las.rate, las.year, las.isyearly;
             
 	-- sp_generate_individual_monthly_accrual`(IN empid INT, curyear INT, rate FLOAT, dateregular DATE, referenceid INT)
 

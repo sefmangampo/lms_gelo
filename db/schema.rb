@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_13_130028) do
+ActiveRecord::Schema.define(version: 2021_09_15_025622) do
 
   create_table "accrual_adjustments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "employeeid"
@@ -39,6 +39,20 @@ ActiveRecord::Schema.define(version: 2021_09_13_130028) do
     t.boolean "active"
     t.integer "frequencyid"
     t.boolean "internal"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "appointments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "text"
+    t.datetime "startdate"
+    t.datetime "enddate"
+    t.boolean "allday"
+    t.string "description"
+    t.string "recurrencerule"
+    t.boolean "iseditable"
+    t.boolean "isusermade"
+    t.integer "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -137,6 +151,7 @@ ActiveRecord::Schema.define(version: 2021_09_13_130028) do
     t.boolean "iscorrectdate"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.float "rate"
   end
 
   create_table "leave_accrual_queues", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -208,12 +223,12 @@ ActiveRecord::Schema.define(version: 2021_09_13_130028) do
     t.date "dateeffective"
     t.integer "leavetypeid"
     t.integer "cutoffid"
-    t.integer "quantity"
     t.integer "status"
     t.integer "year"
     t.string "remarks"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.float "quantity"
   end
 
   create_table "payment_modes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

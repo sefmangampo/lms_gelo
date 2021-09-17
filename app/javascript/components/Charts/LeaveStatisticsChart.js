@@ -1,103 +1,113 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Chart, {
-  ArgumentAxis,
+  Format,
   CommonSeriesSettings,
   Legend,
-  Series,
   Tooltip,
-  ValueAxis,
-  ConstantLine,
+  Export,
+  SeriesTemplate,
   Label,
+  Series,
 } from "devextreme-react/chart";
 
-function customizePercentageText({ valueText }) {
-  return `${valueText}%`;
-}
-
-function customizeTooltip(pointInfo) {
-  return {
-    html: `<div><div class="tooltip-header">${pointInfo.argumentText}</div><div class="tooltip-body"><div class="series-name"><span class='top-series-name'>${pointInfo.points[0].seriesName}</span>: </div><div class="value-text"><span class='top-series-value'>${pointInfo.points[0].valueText}</span></div><div class="series-name"><span class='bottom-series-name'>${pointInfo.points[1].seriesName}</span>: </div><div class="value-text"><span class='bottom-series-value'>${pointInfo.points[1].valueText}</span>% </div></div></div>`,
-  };
-}
+import { getEmployeeLeaves } from "../../data";
 
 export default function LeaveStatisticsChart() {
-  let cumulativeCount = 0;
-  const complaintsData = [
-    { complaint: "Cold pizza", count: 780 },
-    { complaint: "Not enough cheese", count: 120 },
-    { complaint: "Underbaked or Overbaked", count: 52 },
-    { complaint: "Delayed delivery", count: 1123 },
-    { complaint: "Damaged pizza", count: 321 },
-    { complaint: "Incorrect billing", count: 89 },
-    { complaint: "Wrong size delivered", count: 222 },
-  ];
+  const [monthlyData, setMonthlyData] = useState();
+  const currentYear = new Date().getFullYear();
+  const processData = async () => {
+    const leaves = await getEmployeeLeaves.load();
 
-  const data = complaintsData.sort(function (a, b) {
-    return b.count - a.count;
-  });
+    const tempData = [
+      {
+        month: "January",
+        total: 0,
+      },
+      {
+        month: "February",
+        total: 0,
+      },
+      {
+        month: "March",
+        total: 0,
+      },
+      {
+        month: "April",
+        total: 0,
+      },
+      {
+        month: "May",
+        total: 0,
+      },
+      {
+        month: "June",
+        total: 0,
+      },
+      {
+        month: "July",
+        total: 0,
+      },
+      {
+        month: "August",
+        total: 0,
+      },
+      {
+        month: "September",
+        total: 0,
+      },
+      {
+        month: "October",
+        total: 0,
+      },
+      {
+        month: "November",
+        total: 0,
+      },
+      {
+        month: "December",
+        total: 0,
+      },
+    ];
 
-  const totalCount = data.reduce(function (prevValue, item) {
-    return prevValue + item.count;
-  }, 0);
+    leaves.map((leave) => {
+      const dateEff = new Date(leave.dateeffective);
 
-  const dataArray = data.map(function (item) {
-    cumulativeCount += item.count;
-    return {
-      complaint: item.complaint,
-      count: item.count,
-      cumulativePercentage: Math.round((cumulativeCount * 100) / totalCount),
-    };
-  });
+      if (dateEff.getFullYear() == currentYear) {
+        tempData[dateEff.getMonth()].total++;
+      }
+    });
+
+    setMonthlyData(tempData);
+  };
+
+  useEffect(() => {
+    processData();
+  }, []);
 
   return (
     <div>
       <Chart
-        title="Pizza Shop Complaints"
-        dataSource={dataArray}
+        title={`${currentYear} - Leaves per month`}
+        dataSource={monthlyData}
         palette="Harmony Light"
         id="chart"
       >
-        <CommonSeriesSettings argumentField="complaint" />
-        <Series
-          name="Complaint frequency"
-          valueField="count"
-          axis="frequency"
+        <CommonSeriesSettings
+          argumentField="month"
+          valueField="total"
+          ignoreEmptyPoints={true}
           type="bar"
-          color="#fac29a"
-        />
-        <Series
-          name="Cumulative percentage"
-          valueField="cumulativePercentage"
-          axis="percentage"
-          type="spline"
-          color="#6b71c3"
-        />
-
-        <ArgumentAxis>
-          <Label overlappingBehavior="stagger" />
-        </ArgumentAxis>
-
-        <ValueAxis name="frequency" position="left" tickInterval={300} />
-        <ValueAxis
-          name="percentage"
-          position="right"
-          tickInterval={20}
-          showZero={true}
-          valueMarginsEnabled={false}
         >
-          <Label customizeText={customizePercentageText} />
-          <ConstantLine value={80} width={2} color="#fc3535" dashStyle="dash">
-            <Label visible={false} />
-          </ConstantLine>
-        </ValueAxis>
+          <Label visible={true}>
+            <Format type="fixedPoint" precision={0} />
+          </Label>
+        </CommonSeriesSettings>
+        <Series></Series>
+        <SeriesTemplate nameField="month" />
 
-        <Tooltip
-          enabled={true}
-          shared={true}
-          customizeTooltip={customizeTooltip}
-        />
-
-        <Legend verticalAlignment="top" horizontalAlignment="center" />
+        <Tooltip enabled={true} shared={true} />
+        <Legend visible={false} />
+        <Export enabled={true} />
       </Chart>
     </div>
   );

@@ -6,7 +6,10 @@ import {
   loadEmployeesToGroups,
   generateAccrualSettings,
   createMultipleLeavees,
+  generateReports,
 } from "./CustomEndpoints";
+
+import { schedulerDS } from "./SchedulerRest";
 
 const getEmployees = getStore("employees");
 const getPaymentModes = getStore("payment_mode");
@@ -30,6 +33,7 @@ const getPayGroups = getStore("paygroups");
 const getAccrualFrequency = getStore("accrual_frequency");
 const getStatus = getStore("status");
 const getEmploymentStatus = getStore("employment_status");
+const getAppointments = getStore("appointments");
 
 const getActiveStore = async (store, setter, directSub = false, id = "id") => {
   const data = directSub ? data : await store.load();
@@ -42,6 +46,8 @@ const getActiveStore = async (store, setter, directSub = false, id = "id") => {
       type: "array",
     },
     key: id,
+    paginate: true,
+    pageSize: 10,
   });
 };
 
@@ -70,6 +76,8 @@ const getEmployeeFullName = async (filterActive = false) => {
       type: "array",
     },
     key: "id",
+    paginate: true,
+    pageSize: 10,
   };
 };
 
@@ -107,4 +115,7 @@ export {
   getEmploymentStatus,
   generateAccrualSettings,
   createMultipleLeavees,
+  generateReports,
+  getAppointments,
+  schedulerDS,
 };

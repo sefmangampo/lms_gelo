@@ -18,6 +18,7 @@ import SexGrid from "./SexGrid";
 import PayGroupsGrid from "./PayGroupsGrid";
 import EmployeeStatusGrid from "./EmployeeStatusGrid";
 import EmploymentStatusGrid from "./EmploymentStatusGrid";
+import CreateReportsGrid from "./CreateReportsGrid";
 
 export {
   EmployeeMasterGrid,
@@ -40,4 +41,5 @@ export {
   AccrualFrequenciesGrid,
   EmployeeStatusGrid,
   EmploymentStatusGrid,
+  CreateReportsGrid,
 };

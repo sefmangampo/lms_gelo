@@ -12,7 +12,9 @@ import DataGrid, {
   Editing,
   ColumnChooser,
   Summary,
+  Pager,
   TotalItem,
+  FilterPanel,
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
@@ -56,6 +58,8 @@ export default function LeaveAccrualsGrid() {
       type: "array",
     },
     key: "id",
+    pageSize: 20,
+    paginate: true,
   };
 
   const onInitNewRow = (e) => {
@@ -101,7 +105,7 @@ export default function LeaveAccrualsGrid() {
       >
         <FilterRow visible={true} />
         <Editing allowDeleting={true} />
-        <Paging pageSize={10} />
+        <Paging defaultPageSize={10} />
         <StateStoring
           enabled={true}
           type="localStorage"
@@ -157,6 +161,13 @@ export default function LeaveAccrualsGrid() {
           allowEditing={false}
         />
         <Export enabled={true} allowExportSelectedData={true} />
+        <FilterPanel visible={true} />
+        <Pager
+          visible={true}
+          displayMode="compact"
+          showInfo={true}
+          showPageSizeSelector={true}
+        />
         <Selection mode="multiple" />
         <Summary>
           <TotalItem column="employeeid" summaryType="count" />

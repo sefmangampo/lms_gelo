@@ -10,8 +10,6 @@ import {
   PositionsGrid,
   CampaignGrid,
   SexGrid,
-  AccrualFrequenciesGrid,
-  PayGroupsGrid,
   EmployeeStatusGrid,
   EmploymentStatusGrid,
 } from "../../Grids";
@@ -40,11 +38,9 @@ export default function MaintenanceTab() {
         {selectedItem === 6 && <CampaignGrid />}
         {selectedItem === 7 && <PositionsGrid />}
         {selectedItem === 8 && <SexGrid />}
-        {selectedItem === 9 && <AccrualFrequenciesGrid />}
-        {selectedItem === 10 && <PayGroupsGrid />}
-        {selectedItem === 11 && <EmployeeStatusGrid />}
-        {selectedItem === 12 && <EmploymentStatusGrid />}
-        {selectedItem === 13 && <UploadExcelLayout />}
+        {selectedItem === 9 && <EmployeeStatusGrid />}
+        {selectedItem === 10 && <EmploymentStatusGrid />}
+        {selectedItem === 11 && <UploadExcelLayout />}
       </div>
     </div>
   );

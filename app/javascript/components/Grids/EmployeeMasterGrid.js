@@ -24,7 +24,7 @@ import {
   getCampaigns,
   getPositions,
   getSexes,
-  getPayGroups,
+  getPaymentModes,
   getActiveStore,
 } from "../../data";
 
@@ -58,7 +58,7 @@ export default function EmployeeMasterGrid() {
     getActiveStore(getPositions, setPositionsLU);
     getActiveStore(getCampaigns, setCampaignsLU);
     getActiveStore(getSexes, setSexLU);
-    getActiveStore(getPayGroups, setPaygroupsLU);
+    getActiveStore(getPaymentModes, setPaygroupsLU);
     initemployees();
   }, []);
 
@@ -112,7 +112,7 @@ export default function EmployeeMasterGrid() {
         <Paging defaultPageSize={8} />
         <Pager
           visible={true}
-          displayMode="full"
+          displayMode="compact"
           showInfo={true}
           showPageSizeSelector={true}
         />
@@ -187,7 +187,7 @@ export default function EmployeeMasterGrid() {
             valueExpr="id"
             allowClearing={true}
             displayExpr="name"
-            dataSource={getPayGroups}
+            dataSource={getPaymentModes}
           />
         </Column>
         <Column dataField="sexid" dataType="number" caption="Sex">
@@ -198,6 +198,7 @@ export default function EmployeeMasterGrid() {
             dataSource={getSexes}
           />
         </Column>
+        <Column dataField="suffix" dataType="string" caption="Suffix" />
         <Column dataField="active" dataType="boolean" caption="Active" />
         <Column dataField="remarks" dataType="string" caption="Remarks" />
       </DataGrid>

@@ -10,6 +10,7 @@ import DataGrid, {
   Paging,
   FilterPanel,
   StateStoring,
+  Pager,
   FilterRow,
   ColumnChooser,
   RequiredRule,
@@ -78,6 +79,8 @@ export default function EmployeeLeavesGrid() {
       type: "array",
     },
     key: "id",
+    paginate: true,
+    pageSize: 10,
   };
 
   const EmployeeLUDs = {
@@ -86,6 +89,8 @@ export default function EmployeeLeavesGrid() {
       type: "array",
     },
     key: "id",
+    paginate: true,
+    pageSize: 10,
   };
 
   const dateFiledEditorOptions = {
@@ -96,13 +101,17 @@ export default function EmployeeLeavesGrid() {
     openOnFieldClick: true,
   };
 
-  const cutoffeditorOptions = {};
-
-  const setCellValue = (newData, value, currentRowData) => {
-    newData.dateeffective = value;
-
-    if (value) newData.year = new Date(value).getFullYear();
+  const numberBoxEditorOptions = {
+    max: 1,
+    min: 0,
+    showClearButtons: true,
+    showSpinButtons: true,
+    step: 0.5,
+    value: 0,
+    placeholder: "1 for whole day, 0.5 for half day",
   };
+
+  const cutoffeditorOptions = {};
 
   const numberFilterOperations = ["=", "<>", "<", ">", "<=", ">="];
   const dateFilterOperations = ["=", "<>", "<", ">", "<=", ">=", "between"];
@@ -160,6 +169,13 @@ export default function EmployeeLeavesGrid() {
     }
   };
 
+  const onInitNewRow = (e) => {
+    e.data.datefiled = new Date();
+    e.data.dateeffective = new Date();
+    e.data.status = 1;
+    e.data.leavetypeid = 1;
+  };
+
   return (
     <div>
       <DataGrid
@@ -169,6 +185,8 @@ export default function EmployeeLeavesGrid() {
         allowColumnReordering={true}
         showBorders={true}
         showRowLines={true}
+        onInitNewRow={onInitNewRow}
+        dateSerializationFormat="yyyy-MM-dd"
         onRowPrepared={onRowPrepared}
         onEditorPreparing={onEditorPreparing}
         filterBuilder={filterBuilder}
@@ -177,7 +195,14 @@ export default function EmployeeLeavesGrid() {
       >
         <FilterPanel visible={true} />
         <FilterRow visible={true} />
-        <Paging pageSize={10} />
+        <Pager
+          visible={true}
+          displayMode="compact"
+          showPageSizeSelector={true}
+          showInfo={true}
+          showNavigationButtons={true}
+        />
+        <Paging defaultPageSize={10} />
         <Export enabled={true} allowExportSelectedData={true} />
         <ColumnChooser enabled={true} mode="select" />
         <Selection mode="multiple" />
@@ -232,9 +257,12 @@ export default function EmployeeLeavesGrid() {
           dataField="quantity"
           caption="Quantity"
           dataType="number"
+          editorOptions={numberBoxEditorOptions}
           allowFiltering={true}
           width={100}
-        />
+        >
+          <RequiredRule />
+        </Column>
         <Column
           dataField="datefiled"
           width={129}
@@ -248,7 +276,6 @@ export default function EmployeeLeavesGrid() {
           caption="Date Effective"
           dataType="date"
           editorOptions={dateEffEditorOptions}
-          setCellValue={setCellValue}
           width={120}
           allowFiltering={true}
         >

@@ -6,6 +6,7 @@ import disableRowEditing from "./DisableRowEditing";
 import groupBy from "./GroupBy";
 import { sortObjectValuesCompare } from "./SortObjectByProperties";
 import ExcelDateToJSDate from "./GoogleDateToJSDate";
+import { removeTimeZone } from "./RemoveTimezoneFromDate";
 
 export {
   onToolbarPreparing,
@@ -17,4 +18,5 @@ export {
   groupBy,
   sortObjectValuesCompare,
   ExcelDateToJSDate,
+  removeTimeZone,
 };

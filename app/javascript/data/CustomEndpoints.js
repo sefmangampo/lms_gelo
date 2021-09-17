@@ -12,6 +12,12 @@ const generateAccruals = async (year) => {
   return res;
 };
 
+const generateReports = async (data) => {
+  const link = "reports";
+  const res = await executeSQL(link, data);
+  return res;
+};
+
 const generateIndividualAccruals = async (year) => {
   const link = "generate_individual_accruals";
   const data = { year: year };
@@ -100,4 +106,5 @@ export {
   createMultipleEmployees,
   generateAccrualSettings,
   createMultipleLeavees,
+  generateReports,
 };

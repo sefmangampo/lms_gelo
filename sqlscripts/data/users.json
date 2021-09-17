@@ -1,0 +1,1 @@
+[{"id":1, "email":"admin@admin.com", "encrypted_password":"$2a$12$IebvAvsLxFBd9ZCivI9P2O0YtuaGQ/y5zBYtsJ1OYC/Rk52AVVEjG", "reset_password_token":"", "reset_password_sent_at":"", "remember_created_at":"2021-09-13 02:01:41", "created_at":"2021-09-10 10:05:25.377515", "updated_at":"2021-09-13 02:01:41.306257", "username":"admin"}]

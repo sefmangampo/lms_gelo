@@ -52,6 +52,8 @@ export default function AdjustmentsGrid() {
       type: "array",
     },
     key: "id",
+    pageSize: 20,
+    paginate: true,
   };
 
   useEffect(() => {
@@ -121,13 +123,6 @@ export default function AdjustmentsGrid() {
           dataType="date"
         />
         <Column dataField="remarks" caption="Remarks" dataType="string" />
-        <Column
-          dataField="posted"
-          allowEditing={false}
-          caption="Posted"
-          dataType="boolean"
-        />
-
         <Export enabled={true} allowExportSelectedData={true} />
         <Selection mode="multiple" />
         <Editing

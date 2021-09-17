@@ -12,6 +12,7 @@ import DataGrid, {
   TotalItem,
   Pager,
   Paging,
+  FilterPanel,
   StateStoring,
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
@@ -24,6 +25,7 @@ import {
   getActiveStore,
   getLeaveAccrualTypes,
   processAccrualQueue,
+  getEmployeeFullName,
 } from "../../data/";
 
 import { onToolbarPreparing, generateCodeFromID } from "./Helpers";
@@ -50,20 +52,9 @@ export default function LeaveAccrualQueueGrid() {
             const res = await processAccrualQueue();
 
             if (res) {
-              const number = res.Result;
-
-              let mes = "";
-              if (res.Result == 1) {
-                mes = `1 record processed.`;
-                notify(mes, "success", 3000);
-                e.component.refresh();
-              } else if (res.Result > 1) {
-                mes = `${number} records processed.`;
-                notify(mes, "success", 3000);
-                e.component.refresh();
-              } else {
-                notify("No records processed.", "info", 3000);
-              }
+              const mes = ` Records processed.`;
+              notify(mes, "success", 3000);
+              e.component.refresh();
             }
           },
         },
@@ -93,6 +84,8 @@ export default function LeaveAccrualQueueGrid() {
       type: "array",
     },
     key: "id",
+    pageSize: 20,
+    paginate: true,
   };
 
   const calculateCellValue = (rowdata) => {
@@ -176,7 +169,7 @@ export default function LeaveAccrualQueueGrid() {
         <Paging defaultPageSize={8} />
         <Pager
           visible={true}
-          displayMode="full"
+          displayMode="compact"
           showInfo={true}
           showPageSizeSelector={true}
         />
@@ -185,6 +178,7 @@ export default function LeaveAccrualQueueGrid() {
         <Selection mode="multiple" />
         <ColumnChooser enabled={true} mode="select" />
         <FilterRow visible={true} />
+        <FilterPanel visible={true} />
         <Summary>
           <TotalItem column="employeeid" summaryType="count" />
         </Summary>

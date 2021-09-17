@@ -41,22 +41,14 @@ const items = [
   },
   {
     id: "10",
-    text: "Accrual Frequency",
-  },
-  {
-    id: "11",
-    text: "PayGroups",
-  },
-  {
-    id: "12",
     text: "Status",
   },
   {
-    id: "13",
+    id: "11",
     text: "Employee Status",
   },
   {
-    id: "14",
+    id: "12",
     text: "Upload via Excel",
   },
 ];

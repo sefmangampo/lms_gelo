@@ -11,6 +11,7 @@ Rails.application.routes.draw do
         post 'generate_accruals', to: 'leave_accrual_queue#generate_accruals'
         post 'generate_individual_accruals', to: 'leave_accrual_queue#generate_individual_accruals'
         post 'load_employees_to_cut_off_groups', to: 'employee_cut_off_group_members#load_employees_to_cut_off_groups'
+        post 'reports', to: 'reports#generate'
 
         post  'campaign_multiple_insert', to: 'campaign#multiple_insert'
         post  'position_multiple_insert', to: 'position#multiple_insert'
@@ -137,6 +138,12 @@ Rails.application.routes.draw do
         post 'employment_status', to: 'employment_status#create'
         delete 'employment_status/:id', to: 'employment_status#destroy'
         patch 'employment_status/:id', to: 'employment_status#update'
+
+        get 'appointments', to: 'appointments#index'
+        get 'appointments/:id', to: 'appointments#show'
+        post 'appointments', to: 'appointments#create'
+        delete 'appointments/:id', to: 'appointments#destroy'
+        patch 'appointments/:id', to: 'appointments#update'
 
     end
   end
