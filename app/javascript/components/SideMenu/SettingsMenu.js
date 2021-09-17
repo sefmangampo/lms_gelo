@@ -4,24 +4,19 @@ import TreeView from "devextreme-react/tree-view";
 const items = [
   {
     id: 1,
-    text: "Schedules",
+    text: "User",
     selected: true,
   },
   {
     id: 2,
-    text: "Leave Stats",
-  },
-  {
-    id: 3,
-    text: "Employee Stats",
+    text: "Preferences",
   },
 ];
 
-export default function DashboardMenu({ setSelectedItem }) {
+export default function SettingsMenu({ setSelectedItem }) {
   const onItemClick = ({ itemData }) => {
     setSelectedItem(itemData.id);
   };
-
   return (
     <div>
       <TreeView
