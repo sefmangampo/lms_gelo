@@ -5,6 +5,7 @@ import {
   renderMaintenanceTab,
   renderDashboardTab,
   renderLeaveMonitoringTab,
+  renderReportsTab,
 } from "./Tabs";
 
 export default function MenuPanel() {
@@ -18,7 +19,7 @@ export default function MenuPanel() {
         <Item title="Dashboard" render={renderDashboardTab} />
         <Item title="Maintenance" render={renderMaintenanceTab} />
         <Item title="Monitoring" render={renderLeaveMonitoringTab} />
-        <Item title="Reports" />
+        <Item title="Reports" render={renderReportsTab} />
       </TabPanel>
     </div>
   );

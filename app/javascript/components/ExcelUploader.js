@@ -3,18 +3,17 @@ import FileUploader from "devextreme-react/file-uploader";
 
 import { ExcelToJson } from "../data";
 
-export default function ExcelUploader() {
+export default function ExcelUploader({ label, returnData }) {
   const uploadFile = async (file, progressCallBack) => {
-    console.log(file);
     const data = await ExcelToJson(file);
 
-    console.log(data);
+    returnData(data);
   };
 
   return (
     <div>
       <FileUploader
-        selectButtonText="Upload via Excel"
+        selectButtonText={label}
         labelText=""
         uploadFile={uploadFile}
         uploadMode="useButtons"

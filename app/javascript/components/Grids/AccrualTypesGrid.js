@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import DataGrid, { Column, Editing, Export } from "devextreme-react/data-grid";
+import DataGrid, {
+  Column,
+  Editing,
+  Export,
+  Lookup,
+} from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
-import { getLeaveAccrualTypes } from "../../data/";
-import { onToolbarPreparing } from "./Helpers";
+import {
+  getLeaveAccrualTypes,
+  getAccrualFrequency,
+  getActiveStore,
+} from "../../data/";
+import {
+  onToolbarPreparing,
+  disableRowEditing,
+  setActiveLookUp,
+} from "./Helpers";
 
 const dataSource = new DataSource({
   key: "id",
@@ -12,6 +25,12 @@ const dataSource = new DataSource({
 });
 
 export default function AccrualTypesGrid() {
+  const [frequency, setFrequency] = useState();
+
+  useEffect(() => {
+    getActiveStore(getAccrualFrequency, setFrequency);
+  }, []);
+
   const setToolbar = (e) => {
     onToolbarPreparing(e, "Accrual Types");
   };
@@ -19,12 +38,23 @@ export default function AccrualTypesGrid() {
   const onInitNewRow = (e) => {
     e.data.active = true;
   };
+
+  const onCellPrepared = (e) => {
+    disableRowEditing(e);
+  };
+
+  const onEditorPreparing = (e) => {
+    setActiveLookUp(e, "frequencyid", frequency);
+  };
+
   return (
     <div>
       <DataGrid
         dataSource={dataSource}
         showBorders={true}
         showRowLines={true}
+        onCellPrepared={onCellPrepared}
+        onEditorPreparing={onEditorPreparing}
         onInitNewRow={onInitNewRow}
         onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
@@ -36,7 +66,14 @@ export default function AccrualTypesGrid() {
           mode="form"
         />
         <Column dataField="name" caption="Name" dataType="string" />
-        <Column dataField="frequencyid" caption="Frequency" dataType="number" />
+        <Column dataField="frequencyid" caption="Frequency" dataType="number">
+          <Lookup
+            valueExpr="id"
+            allowClearing={true}
+            displayExpr="name"
+            dataSource={getAccrualFrequency}
+          />
+        </Column>
         <Column dataField="active" caption="Active" dataType="boolean" />
         <Export enabled={true} />
       </DataGrid>

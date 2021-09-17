@@ -10,31 +10,23 @@ import DataGrid, {
   StateStoring,
   FilterRow,
   Summary,
+  FilterPanel,
+  Pager,
   TotalItem,
-  Format
+  Format,
 } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
 import { getLeaveCredits } from "../../data/";
-import { onToolbarPreparing } from "./Helpers";
-
-const groupBy = (items, key) =>
-  items.reduce(
-    (result, item) => ({
-      ...result,
-      [item[key]]: [...(result[item[key]] || []), item],
-    }),
-    {}
-  );
+import { onToolbarPreparing, groupBy } from "./Helpers";
 
 export default function LeaveCreditsGrid() {
   const [leaveCreditsData, setLeaveCreditsData] = useState(null);
 
   const aggregateEntries = (yearlyArr = [], returnArray) => {
-
     let ydata = [];
-    const hasLeave = yearlyArr.findIndex(el => el.isleave)
-    const hasAccruals = yearlyArr.findIndex(el => el.isleave == 0)
+    const hasLeave = yearlyArr.findIndex((el) => el.isleave);
+    const hasAccruals = yearlyArr.findIndex((el) => el.isleave == 0);
 
     if (hasLeave == -1 && hasAccruals >= 0) {
       ydata[0] = yearlyArr;
@@ -48,19 +40,23 @@ export default function LeaveCreditsGrid() {
     const y_leavesData = ydata[1];
 
     if (hasLeave > -1) {
-
       const y_employeeLeaves = groupBy(y_leavesData, "employeeid");
 
       for (let key in y_employeeLeaves) {
         if (y_employeeLeaves.hasOwnProperty(key)) {
           const el = y_employeeLeaves[key][0];
 
-          if (!returnArray.find((x) => (x.employeeid === el.employeeid && x.year === el.year))) {
+          if (
+            !returnArray.find(
+              (x) => x.employeeid === el.employeeid && x.year === el.year
+            )
+          ) {
             returnArray.push({
               employeeid: el.employeeid,
               employee: el.employee,
               leavetype: el.leaveaccrualtype,
               total: 0,
+              leavetotal: 0,
               year: el.year,
             });
           }
@@ -68,19 +64,23 @@ export default function LeaveCreditsGrid() {
       }
     }
 
-    if (hasAccruals > - 1) {
-
+    if (hasAccruals > -1) {
       const y_employeeAccruals = groupBy(y_accrualData, "employeeid");
 
       for (let key in y_employeeAccruals) {
         if (y_employeeAccruals.hasOwnProperty(key)) {
           const el = y_employeeAccruals[key][0];
 
-          if (!returnArray.find((x) => (x.employeeid === el.employeeid && x.year === el.year))) {
+          if (
+            !returnArray.find(
+              (x) => x.employeeid === el.employeeid && x.year === el.year
+            )
+          ) {
             returnArray.push({
               employeeid: el.employeeid,
               employee: el.employee,
               leavetype: el.leaveaccrualtype,
+              leavetotal: 0,
               total: 0,
               year: el.year,
             });
@@ -88,7 +88,6 @@ export default function LeaveCreditsGrid() {
         }
       }
     }
-
   };
 
   const initData = async () => {
@@ -98,7 +97,6 @@ export default function LeaveCreditsGrid() {
     const byYearData = groupBy(data, "year");
 
     for (let key in byYearData) {
-
       if (byYearData.hasOwnProperty(key)) {
         const dat = byYearData[key];
 
@@ -114,6 +112,9 @@ export default function LeaveCreditsGrid() {
         const emp = masterList[y];
 
         if (emp.employeeid === d.employeeid && emp.year === d.year) {
+          if (d.isleave) {
+            emp.leavetotal = emp.leavetotal + 1;
+          }
           emp.total = emp.total + d.quantity;
         }
       }
@@ -143,11 +144,15 @@ export default function LeaveCreditsGrid() {
 
     const getDB = async () => {
       const d = await getLeaveCredits.load();
-      const newD = d.filter((df) => (df.employeeid == data.key.employeeid && df.year === data.key.year));
+      const newD = d.filter(
+        (df) =>
+          df.employeeid == data.key.employeeid && df.year === data.key.year
+      );
       newD.forEach((element) => {
         element.quantity =
           element.isleave == 1 ? element.quantity * -1 : element.quantity;
       });
+
       setDb(newD);
     };
 
@@ -161,6 +166,8 @@ export default function LeaveCreditsGrid() {
         type: "array",
         data: db,
       },
+      pageSize: 20,
+      paginate: true,
     };
 
     const onRowPrepared = (e) => {
@@ -191,6 +198,7 @@ export default function LeaveCreditsGrid() {
           onRowPrepared={onRowPrepared}
         >
           <FilterRow visible={true} />
+          <FilterPanel visible={true} />
           <Paging pageSize={10} />
           <Selection mode="multiple" />
           <ColumnChooser enabled={true} mode="select" />
@@ -210,7 +218,6 @@ export default function LeaveCreditsGrid() {
             caption="Type"
             dataType="string"
           />
-          <Column dataField="period" caption="Cut-off" dataType="string" />
           <Summary>
             <TotalItem column="employee" summaryType="count" />
             <TotalItem column="quantity" summaryType="sum" />
@@ -231,25 +238,38 @@ export default function LeaveCreditsGrid() {
         onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
       >
+        <FilterPanel visible={true} />
         <FilterRow visible={true} />
-        <Paging pageSize={10} />
+        <Paging defaultPageSize={8} />
         <Selection mode="multiple" />
-        <StateStoring enabled={true} type="localStorage" storageKey="storage" />
+        <StateStoring
+          enabled={true}
+          type="localStorage"
+          storageKey="lms_credits_main"
+        />
         <Column
           dataField="employee"
           caption="Employee"
           dataType="string"
         ></Column>
         <Column dataField="leavetype" caption="Type" dataType="string" />
+        <Column
+          dataField="leavetotal"
+          caption="Number of Leaves"
+          dataType="number"
+        />
         <Column dataField="total" caption="Credits" dataType="number">
-          <Format
-            type="fixedPoint"
-            precision={2}
-          />
+          <Format type="fixedPoint" precision={2} />
         </Column>
         <Column dataField="year" caption="Year" dataType="number" />
         <Export enabled={true} allowExportSelectedData={true} />
-
+        <Pager
+          visible={true}
+          displayMode="compact"
+          showPageSizeSelector={true}
+          showInfo={true}
+          showNavigationButtons={true}
+        />
         <MasterDetail enabled={true} component={detailTemplate} />
         <Summary>
           <TotalItem column="employee" summaryType="count" />

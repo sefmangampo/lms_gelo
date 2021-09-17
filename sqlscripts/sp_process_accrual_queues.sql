@@ -8,14 +8,14 @@ DECLARE n DATETIME DEFAULT now();
 	IF (@t_exists = 1) THEN
         DROP TEMPORARY TABLE temp_table_process_accruals_queues;
     END IF;
-CREATE TEMPORARY TABLE temp_table_process_accruals_queues(id INT, employeeid INT, dateeffective DATE, valueToAdd FLOAT, Remarks VARCHAR(200), systemgenerated BOOLEAN, created_at DATETIME, updated_at DATETIME, leavetypeid INT, year INT, accrualTypeId INT);
+CREATE TEMPORARY TABLE temp_table_process_accruals_queues(id INT, employeeid INT, dateeffective DATE, valueToAdd FLOAT, Remarks VARCHAR(200), systemgenerated BOOLEAN, created_at DATETIME, updated_at DATETIME,  year INT, accrualTypeId INT);
 
-INSERT INTO temp_table_process_accruals_queues(id, employeeid, dateeffective, valueToAdd, Remarks, systemgenerated, created_at, updated_at, leavetypeid, year, accrualTypeId)
-SELECT  laq.id, laq.employeeid, laq.dateeffective, laq.valuetoadd, 'From Accrual Queue', 1, n, n, laq.leavetypeid, laq.year, laq.accrualtypeid
+INSERT INTO temp_table_process_accruals_queues(id, employeeid, dateeffective, valueToAdd, Remarks, systemgenerated, created_at, updated_at,  year, accrualTypeId)
+SELECT  laq.id, laq.employeeid, laq.dateeffective, laq.valuetoadd, 'From Accrual Queue', 1, n, n,  laq.year, laq.accrualtypeid
 FROM leave_accrual_queues laq
 WHERE laq.year = yearTarget
 	AND ifnull(laq.posted, false) = false 
-    AND laq.dateeffective < n
+    AND year(laq.dateeffective) <= yearTarget
 	AND NOT EXISTS 
     (
     SELECT la.id 
@@ -27,13 +27,13 @@ WHERE laq.year = yearTarget
     );
 
 
- INSERT INTO leave_accruals(employeeid, dategiven, valueadded, remarks, issystemgenerated, created_at, updated_at, leavetypeid, leaveaccrualtypeid, year, referenceid)
-SELECT employeeid, dateeffective, valueToAdd, Remarks, systemgenerated, created_at, updated_at, leavetypeid,  accrualTypeId, year, id
+ INSERT INTO leave_accruals(employeeid, dategiven, valueadded, remarks, issystemgenerated, created_at, updated_at,  leaveaccrualtypeid, year, referenceid)
+SELECT employeeid, dateeffective, valueToAdd, Remarks, systemgenerated, created_at, updated_at, accrualTypeId, year, id
 FROM temp_table_process_accruals_queues t;
 
-UPDATE leave_accrual_queues laq
-INNER JOIN temp_table_process_accruals_queues t ON t.id = laq.id
-SET laq.posted = true;
+ UPDATE leave_accrual_queues laq
+ INNER JOIN temp_table_process_accruals_queues t ON t.id = laq.id
+ SET laq.posted = true;
 
- SELECT ROW_COUNT() AS 'Result';
+ SELECT 1 AS 'Result';
 END

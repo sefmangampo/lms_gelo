@@ -40,6 +40,15 @@ class Api::V1::LeaveAccrualSettingsController < ApiController
   
   end
 
+  def process_queue_to_settings
+
+    year = Date.current.year if params[:year].blank?   
+    res = ActiveRecord::Base.connection.exec_query("call sp_process_to_settings")
+
+    render json: res[0]
+
+  end
+
   private 
 
   def set_leave_accrual_settings
@@ -47,6 +56,6 @@ class Api::V1::LeaveAccrualSettingsController < ApiController
   end
 
   def leave_accrual_settings_params
-    params.permit(:id, :employeeid, :leave_accrual_setting, :isregular ,:rate, :year, :isyearly, :active, :leavetypeid)
+    params.permit(:id, :employeeid, :leave_accrual_setting, :isregular ,:rate, :year, :isyearly, :active, :dateeffective)
   end
 end

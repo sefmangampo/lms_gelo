@@ -6,7 +6,6 @@ import config from "devextreme/core/config";
 
 config({
   forceIsoDateParsing: true,
-  // ...
 });
 
 export default function Home() {

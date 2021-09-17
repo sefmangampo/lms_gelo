@@ -12,6 +12,7 @@ import DataGrid, {
   StateStoring,
   FilterRow,
   RequiredRule,
+  Format,
   Summary,
   TotalItem,
 } from "devextreme-react/data-grid";
@@ -25,6 +26,7 @@ import {
 } from "../../data/";
 
 import { onToolbarPreparing, setActiveLookUp } from "./Helpers";
+import dxCalendar from "devextreme/ui/calendar";
 
 const dataSource = new DataSource({
   key: "id",
@@ -67,6 +69,8 @@ export default function UndertimeGrid() {
       type: "array",
     },
     key: "id",
+    paginate: true,
+    pageSize: 20,
   };
 
   useEffect(() => {
@@ -74,45 +78,57 @@ export default function UndertimeGrid() {
     getLastCutoff();
   }, []);
 
-  const onInitNewRow = (e) => {
-    e.data.cutoffid = lastcutoff;
-  };
-
   const dateEditorOptions = {
-    type: "time",
-    showClearButton: true,
     openOnFieldClick: true,
+    type: "date",
   };
   const onEditorPreparing = (e) => {
     if (e.parentType === "dataRow") {
-      if (e.dataField == "to" || e.dataField == "from") {
+      if (e.dataField == "tohours" || e.dataField == "fromhours") {
         e.editorOptions.type = "time";
-        e.editorOptions.showClearButton = true;
       }
     }
   };
 
   const setDateCellValue = (newData, value) => {
-    newData.to = value;
-    newData.from = value;
-    newData.date = value;
+    const d = new Date(value);
+    d.setHours(0, 0, 0, 0);
+    newData.date = d;
+
+    const startHour = new Date(d);
+    const endHour = new Date(d);
+    startHour.setTime(startHour.setHours(startHour.getHours() + 13));
+    endHour.setTime(endHour.setHours(endHour.getHours() + 17));
+    newData.fromhours = startHour;
+    newData.tohours = endHour;
+    newData.hours = (endHour - startHour) / 36e5;
+    newData.year = new Date(value).getFullYear();
   };
 
   const setToCellValue = (newData, value, currentRowData) => {
-    newData.to = value;
+    newData.tohours = new Date(value);
 
-    if (newData.to && currentRowData.from) {
-      const datediff = newData.to - currentRowData.from;
+    if (newData.tohours && currentRowData.fromhours) {
+      const datediff = newData.tohours - new Date(currentRowData.fromhours);
       newData.hours = datediff / 36e5;
     }
   };
   const setFromCellValue = (newData, value, currentRowData) => {
-    newData.from = value;
+    newData.fromhours = new Date(value);
 
-    if (currentRowData.to && newData.from) {
-      const datediff = currentRowData.to - newData.from;
+    if (currentRowData.tohours && newData.fromhours) {
+      const datediff = currentRowData.tohours - newData.fromhours;
       newData.hours = datediff / 36e5;
     }
+  };
+
+  const realDateEditorOptions = {
+    showClearButton: true,
+    openOnFieldClick: true,
+    showAnalogClock: false,
+    onOpened: (e) => {
+      document.getElementsByClassName("dx-timeview")[0].style.display = "none";
+    },
   };
 
   return (
@@ -126,14 +142,17 @@ export default function UndertimeGrid() {
         onEditorPreparing={onEditorPreparing}
         allowColumnReordering={true}
         allowColumnResizing={true}
-        onInitNewRow={onInitNewRow}
         onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
       >
         <FilterPanel visible={true} />
         <FilterRow visible={true} />
         <Paging pageSize={10} />
-        <StateStoring enabled={true} type="localStorage" storageKey="storage" />
+        <StateStoring
+          enabled={true}
+          type="localStorage"
+          storageKey="lms_undertime"
+        />
         <Column dataField="employeeid" caption="Employee" dataType="number">
           <Lookup
             valueExpr="id"
@@ -145,16 +164,17 @@ export default function UndertimeGrid() {
         </Column>
         <Column
           dataField="date"
-          setCellValue={setDateCellValue}
           caption="Date"
-          dataType="date"
+          dataType="datetime"
+          setCellValue={setDateCellValue}
+          editorOptions={realDateEditorOptions}
         >
+          <Format type="shortDate" />
           <RequiredRule />
         </Column>
         <Column
           dataField="fromhours"
           caption="From"
-          dataType="datetime"
           setCellValue={setFromCellValue}
           editorOptions={dateEditorOptions}
         >
@@ -164,14 +184,13 @@ export default function UndertimeGrid() {
         <Column
           dataField="tohours"
           caption="To"
-          dataType="datetime"
           setCellValue={setToCellValue}
           editorOptions={dateEditorOptions}
         >
           <RequiredRule />
         </Column>
         <Column
-          name="hours"
+          dataField="hours"
           caption="Hours"
           dataType="number"
           allowEditing={false}

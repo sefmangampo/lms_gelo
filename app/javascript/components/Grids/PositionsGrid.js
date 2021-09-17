@@ -1,6 +1,12 @@
 import React from "react";
 
-import DataGrid, { Column, Editing, Export } from "devextreme-react/data-grid";
+import DataGrid, {
+  Column,
+  Editing,
+  Export,
+  Pager,
+  Paging,
+} from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
 import { getPositions } from "../../data/";
@@ -13,7 +19,7 @@ const dataSource = new DataSource({
 
 export default function PositionsGrid() {
   const setToolbar = (e) => {
-    onToolbarPreparing(e, "Positions");
+    onToolbarPreparing(e, "Job Position");
   };
 
   const onInitNewRow = (e) => {
@@ -30,6 +36,13 @@ export default function PositionsGrid() {
         onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
       >
+        <Paging defaultPageSize={10} />
+        <Pager
+          visible={true}
+          displayMode="full"
+          showInfo={true}
+          showPageSizeSelector={true}
+        />
         <Editing
           allowUpdating={true}
           allowAdding={true}

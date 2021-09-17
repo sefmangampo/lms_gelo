@@ -5,9 +5,10 @@ class CreateUndertimes < ActiveRecord::Migration[6.1]
       t.datetime :fromhours
       t.datetime :tohours
       t.integer :cutoffid
-      t.date :date
+      t.datetime :date
       t.integer :year
       t.string :remarks
+      t.float :hours
 
       t.timestamps
     end

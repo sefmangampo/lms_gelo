@@ -29,11 +29,11 @@ const items = [
   },
   {
     id: "7",
-    text: "Campaigns",
+    text: "Office Branch",
   },
   {
     id: "8",
-    text: "Positions",
+    text: "Job Positions",
   },
   {
     id: "9",
@@ -41,11 +41,15 @@ const items = [
   },
   {
     id: "10",
-    text: "Accrual Frequency",
+    text: "Status",
   },
   {
     id: "11",
-    text: "PayGroups",
+    text: "Employee Status",
+  },
+  {
+    id: "12",
+    text: "Upload via Excel",
   },
 ];
 

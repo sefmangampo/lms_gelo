@@ -4,7 +4,7 @@ import DataGrid, { Column, Editing, Export } from "devextreme-react/data-grid";
 import DataSource from "devextreme/data/data_source";
 
 import { getLeaveStatuses } from "../../data/";
-import { onToolbarPreparing } from "./Helpers";
+import { onToolbarPreparing, disableRowEditing } from "./Helpers";
 
 const dataSource = new DataSource({
   key: "id",
@@ -20,12 +20,18 @@ export default function LeaveStatusGrid() {
     e.data.active = true;
   };
 
+  const onCellPrepared = (e) => {
+    disableRowEditing(e);
+  };
+
   return (
     <div>
       <DataGrid
         dataSource={dataSource}
         showBorders={true}
+        onCellPrepared={onCellPrepared}
         showRowLines={true}
+        onInitNewRow={onInitNewRow}
         onToolbarPreparing={setToolbar}
         rowAlternationEnabled={true}
       >

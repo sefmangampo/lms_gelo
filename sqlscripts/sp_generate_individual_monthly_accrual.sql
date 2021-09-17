@@ -32,8 +32,8 @@ BEGIN
     UNION ALL
     SELECT 12, STR_TO_DATE(concat_ws('-','1','12', curyear),'%d-%m-%Y');
 
-    INSERT INTO leave_accrual_queues(employeeid, dateeffective, valuetoadd, created_at, updated_at, leavetypeid, year, posted, accrualtypeid, referenceid)
-    SELECT empid, t.tdate, rate, now(), now(), 1, curyear, 0, 1, referenceid
+    INSERT INTO leave_accrual_queues(employeeid, dateeffective, valuetoadd, created_at, updated_at, year, posted, accrualtypeid, referenceid)
+    SELECT empid, t.tdate, rate, now(), now(), curyear, 0, 1, referenceid
     FROM temp_calendar t
     WHERE t.tmonth >= month(dateregular) 
     AND NOT EXISTS (

@@ -23,6 +23,8 @@ import {
   getEmployeeFullName,
   getCampaigns,
   getPositions,
+  getSexes,
+  getPaymentModes,
   getActiveStore,
 } from "../../data";
 
@@ -38,6 +40,8 @@ export default function EmployeeMasterGrid() {
   const [campaignsLU, setCampaignsLU] = useState();
   const [managersLU, setManagersLU] = useState();
   const [activeManagersLU, setActiveManagersLU] = useState();
+  const [sexLU, setSexLU] = useState();
+  const [paygroupsLU, setPaygroupsLU] = useState();
 
   const setToolbar = (e) => {
     onToolbarPreparing(e, "Employees");
@@ -53,6 +57,8 @@ export default function EmployeeMasterGrid() {
   useEffect(() => {
     getActiveStore(getPositions, setPositionsLU);
     getActiveStore(getCampaigns, setCampaignsLU);
+    getActiveStore(getSexes, setSexLU);
+    getActiveStore(getPaymentModes, setPaygroupsLU);
     initemployees();
   }, []);
 
@@ -68,6 +74,8 @@ export default function EmployeeMasterGrid() {
     setActiveLookUp(e, "positionid", positionsLU);
     setActiveLookUp(e, "campaignid", campaignsLU);
     setActiveLookUp(e, "managerid", activeManagersLU);
+    setActiveLookUp(e, "sexid", sexLU);
+    setActiveLookUp(e, "paygroupid", paygroupsLU);
   };
 
   return (
@@ -77,7 +85,6 @@ export default function EmployeeMasterGrid() {
         dataSource={dataSource}
         onEditorPreparing={onEditorPreparing}
         onInitNewRow={onInitNewRow}
-
         width={"auto"}
         showBorders={true}
         allowColumnResizing={true}
@@ -93,24 +100,36 @@ export default function EmployeeMasterGrid() {
         />
         <FilterPanel visible={true} />
         <FilterRow visible={true} />
-        <Paging pageSize={20} />
-        <StateStoring enabled={true} type="localStorage" storageKey="storage" />
+        <StateStoring
+          enabled={true}
+          type="localStorage"
+          storageKey="lms_employee"
+        />
         <Export enabled={true} allowExportSelectedData={true} />
         <ColumnChooser enabled={true} mode="select" />
         <Selection mode="multiple" />
 
-        <Pager showPageSizeSelector={true} showNavigationButtons={true} displayMode='compact' />
-        <Scrolling preloadEnabled={true} rowRenderingMode={true} showScrollbar='always'
+        <Paging defaultPageSize={8} />
+        <Pager
+          visible={true}
+          displayMode="compact"
+          showInfo={true}
+          showPageSizeSelector={true}
+        />
+        <Scrolling
+          preloadEnabled={true}
+          rowRenderingMode={true}
+          showScrollbar="always"
         />
 
-        <Column dataField="lastname" caption="Last Name" visible={true}>
+        <Column dataField="lastname" caption="Last Name" visible={false}>
           <RequiredRule />
         </Column>
         <Column dataField="firstname" caption="First Name" visible={false}>
           <RequiredRule />
         </Column>
         <Column dataField="middlename" caption="Middle Name" visible={false} />
-        <Column calculateCellValue={displayFullName} caption="Full Name" >
+        <Column dataField="fullname" caption="Full Name">
           <FormItem visible={false} />
         </Column>
         <Column dataField="datehired" caption="Date Hired" dataType="date">
@@ -125,8 +144,9 @@ export default function EmployeeMasterGrid() {
           dataField="dateregular"
           caption="Date Regular"
           dataType="date"
+          visible={false}
         />
-        <Column dataField="positionid" caption="Position" dataType="number">
+        <Column dataField="positionid" caption="Job Position" dataType="number">
           <Lookup
             valueExpr="id"
             allowClearing={true}
@@ -134,7 +154,11 @@ export default function EmployeeMasterGrid() {
             dataSource={getPositions}
           />
         </Column>
-        <Column dataField="campaignid" caption="Campaign" dataType="number">
+        <Column
+          dataField="campaignid"
+          caption="Office Branch"
+          dataType="number"
+        >
           <Lookup
             valueExpr="id"
             allowClearing={true}
@@ -150,8 +174,31 @@ export default function EmployeeMasterGrid() {
             dataSource={managersLU}
           />
         </Column>
-        <Column dataField="paygroupid" dataType="number" caption="Pay Group" />
-        <Column dataField="sex" dataType="number" caption="Sex" />
+        <Column dataField="ombmtmid" caption="OM/BM/TM" dataType="number">
+          <Lookup
+            valueExpr="id"
+            allowClearing={true}
+            displayExpr="name"
+            dataSource={managersLU}
+          />
+        </Column>
+        <Column dataField="paygroupid" dataType="number" caption="Pay Group">
+          <Lookup
+            valueExpr="id"
+            allowClearing={true}
+            displayExpr="name"
+            dataSource={getPaymentModes}
+          />
+        </Column>
+        <Column dataField="sexid" dataType="number" caption="Sex">
+          <Lookup
+            valueExpr="id"
+            allowClearing={true}
+            displayExpr="name"
+            dataSource={getSexes}
+          />
+        </Column>
+        <Column dataField="suffix" dataType="string" caption="Suffix" />
         <Column dataField="active" dataType="boolean" caption="Active" />
         <Column dataField="remarks" dataType="string" caption="Remarks" />
       </DataGrid>

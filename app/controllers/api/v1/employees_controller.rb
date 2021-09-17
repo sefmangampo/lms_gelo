@@ -34,6 +34,49 @@ class Api::V1::EmployeesController < ApiController
         end
     end
 
+    def multiple_insert
+
+        # params.require(:records).permit(campaign: {}, records:[:name ,:active],)
+         @payload = params[:records]
+         
+     
+         @records = Employee.all
+         @created_records = []
+     
+     
+         @payload.each { |data|
+     
+           @has_entry = false;
+     
+           @records.each { |rec|
+             if rec['firstname'] == data['firstname'] && rec['lastname'] == data['lastname']
+               @has_entry = true
+             end
+           }
+     
+           if !@has_entry
+               data['created_at'] = Time.now
+               data['updated_at'] = Time.now
+     
+               @created_records.push(data)
+        
+           end
+         }
+     
+         @res = @created_records.length
+     
+         if @created_records.length > 0
+     
+           @res = Employee.insert_all(@created_records)
+     
+         end
+    
+         render json: @res
+       
+       end
+
+  
+
     def update
         set_employee()
         if @employee.update(employee_params)

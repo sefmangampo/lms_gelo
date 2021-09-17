@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  empid: 1
+  employeename: MyString
+  leavedate: 2021-09-13 21:00:28
+  isfound: false
+  iscorrectdate: false
+
+two:
+  empid: 1
+  employeename: MyString
+  leavedate: 2021-09-13 21:00:28
+  isfound: false
+  iscorrectdate: false

@@ -4,7 +4,12 @@ import {
   processAccrualQueue,
   generateIndividualAccruals,
   loadEmployeesToGroups,
+  generateAccrualSettings,
+  createMultipleLeavees,
+  generateReports,
 } from "./CustomEndpoints";
+
+import { schedulerDS } from "./SchedulerRest";
 
 const getEmployees = getStore("employees");
 const getPaymentModes = getStore("payment_mode");
@@ -23,6 +28,12 @@ const getUnderTimes = getStore("undertime");
 const getAdjustments = getStore("accrual_adjustments");
 const getCutOffGroups = getStore("employee_cut_off_groups");
 const getCutOffGroupMembers = getStore("employee_cut_off_group_members");
+const getSexes = getStore("sex");
+const getPayGroups = getStore("paygroups");
+const getAccrualFrequency = getStore("accrual_frequency");
+const getStatus = getStore("status");
+const getEmploymentStatus = getStore("employment_status");
+const getAppointments = getStore("appointments");
 
 const getActiveStore = async (store, setter, directSub = false, id = "id") => {
   const data = directSub ? data : await store.load();
@@ -35,6 +46,8 @@ const getActiveStore = async (store, setter, directSub = false, id = "id") => {
       type: "array",
     },
     key: id,
+    paginate: true,
+    pageSize: 10,
   });
 };
 
@@ -63,6 +76,8 @@ const getEmployeeFullName = async (filterActive = false) => {
       type: "array",
     },
     key: "id",
+    paginate: true,
+    pageSize: 10,
   };
 };
 
@@ -93,4 +108,14 @@ export {
   getCutOffGroupMembers,
   getCutOffGroups,
   loadEmployeesToGroups,
+  getSexes,
+  getAccrualFrequency,
+  getPayGroups,
+  getStatus,
+  getEmploymentStatus,
+  generateAccrualSettings,
+  createMultipleLeavees,
+  generateReports,
+  getAppointments,
+  schedulerDS,
 };

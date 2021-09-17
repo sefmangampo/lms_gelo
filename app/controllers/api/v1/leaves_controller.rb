@@ -16,6 +16,13 @@ class Api::V1::LeavesController < ApiController
   def create
     @leave = Leafe.new(leave_params)
    
+    @leave.year = @leave.dateeffective.year
+    
+    if @leave.remarks.nil?
+      @leave.remarks = ""
+    end
+
+
     if @leave.save
       render json: @leave
     else
@@ -47,6 +54,6 @@ class Api::V1::LeavesController < ApiController
   end
 
   def leave_params
-    params.permit(:id, :employeeid, :datefiled ,:dateeffective, :status, :year, :leavetypeid, :leafe, :quantity, :cutoffid)
+    params.permit(:id, :employeeid, :datefiled ,:dateeffective, :remarks, :status, :year, :leavetypeid, :leafe, :quantity, :cutoffid)
   end
 end

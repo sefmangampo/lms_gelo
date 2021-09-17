@@ -9,6 +9,7 @@ import DataGrid, {
   Paging,
   Editing,
   FilterPanel,
+  Pager,
   FormItem,
   StateStoring,
   FilterRow,
@@ -25,7 +26,7 @@ import {
   getLeaveTypes,
   getActiveStore,
   generateAccruals,
-  generateIndividualAccruals,
+  generateAccrualSettings,
 } from "../../data/";
 
 import {
@@ -50,13 +51,27 @@ export default function LeaveAccrualSettingsGrid() {
         widget: "dxButton",
         options: {
           icon: "refresh",
+          text: "Load employees",
+          onClick: async () => {
+            const res2 = await generateAccrualSettings();
+            const mes = `Records processed.`;
+            notify(mes, "info", 3000);
+            e.component.refresh();
+          },
+        },
+      },
+      {
+        location: "after",
+        widget: "dxButton",
+        options: {
+          icon: "refresh",
           text: "Process to Queue",
           onClick: async () => {
-            const res2 = await generateIndividualAccruals();
+            //  const res2 = await generateIndividualAccruals();
             const res = await generateAccruals();
 
             const mes = `Records processed.`;
-            notify(mes, "info", 3000);
+            notify(mes, "success", 3000);
             e.component.refresh();
           },
         },
@@ -87,6 +102,8 @@ export default function LeaveAccrualSettingsGrid() {
       type: "array",
     },
     key: "id",
+    pageSize: 20,
+    paginate: true,
   };
 
   const onInitNewRow = (e) => {
@@ -132,8 +149,18 @@ export default function LeaveAccrualSettingsGrid() {
       >
         <FilterPanel visible={true} />
         <FilterRow visible={true} />
-        <Paging pageSize={10} />
-        <StateStoring enabled={true} type="localStorage" storageKey="storage" />
+        <Paging defaultPageSize={10} />
+        <Pager
+          visible={true}
+          displayMode="compact"
+          showInfo={true}
+          showPageSizeSelector={true}
+        />
+        <StateStoring
+          enabled={true}
+          type="localStorage"
+          storageKey="lms_settings"
+        />
         <Column
           name="code"
           width={100}
@@ -150,23 +177,24 @@ export default function LeaveAccrualSettingsGrid() {
             dataSource={EmployeeLUDs}
           />
         </Column>
-        <Column dataField="leavetypeid" caption="Leave Type" dataType="number">
-          <Lookup
-            valueExpr="id"
-            allowClearing={true}
-            displayExpr="name"
-            dataSource={getLeaveTypes}
-          />
-        </Column>
+        <Column
+          dataField="dateeffective"
+          caption="Date Effective"
+          dataType="date"
+        />
         <Column dataField="year" caption="Year" dataType="number" />
         <Column dataField="rate" caption="Rate" dataType="number" />
-        <Column dataField="isregular" caption="Regular" dataType="boolean" />
         <Column
           dataField="isyearly"
           caption="Credited Per Year"
           dataType="boolean"
         />
-        <Column dataField="active" caption="Active" dataType="boolean" />
+        <Column
+          dataField="active"
+          caption="Active"
+          dataType="boolean"
+          visible={false}
+        />
         <Export enabled={true} allowExportSelectedData={true} />
         <Selection mode="multiple" />
         <Editing allowDeleting={true} />

@@ -47,7 +47,7 @@ class Api::V1::EmployeeCutOffGroupsController < ApiController
   end
 
   def cut_params
-    params.permit(:id, :name , :paymodeid, :cutoffid, :year,:active)
+    params.permit(:id, :name , :paymodeid, :description, :cutoffid, :year,:active, EmployeeCutOffGroup: [:name , :paymodeid, :description, :cutoffid, :year,:active])
   end
 end
 
